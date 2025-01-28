@@ -33,6 +33,13 @@ ament_target_dependencies(psu_node rclcpp hcoil_interfaces)
 
 install(TARGETS
   psu_node
-  DESTINATION lib/${PROJECT_NAME})
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+# Install launch files.
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}/
+)
 
 ament_package()

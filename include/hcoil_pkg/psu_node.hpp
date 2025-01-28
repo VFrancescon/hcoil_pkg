@@ -2,6 +2,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 #include "hcoil_interfaces/msg/mag_field.hpp"
+#include "hcoil_interfaces/msg/volt_amp.hpp"
 using std::placeholders::_1;
 
 class PSU_Node : public rclcpp::Node
@@ -11,8 +12,8 @@ class PSU_Node : public rclcpp::Node
     
     private:
         std::string psu_addr_;
-        void callbackVIWrite(const hcoil_interfaces::msg::MagField &msg);
-        rclcpp::Subscription<hcoil_interfaces::msg::MagField>::SharedPtr vi_sub_;
+        void callbackVIWrite(const hcoil_interfaces::msg::VoltAmp &msg);
+        rclcpp::Subscription<hcoil_interfaces::msg::VoltAmp>::SharedPtr vi_sub_;
 };
 
 
