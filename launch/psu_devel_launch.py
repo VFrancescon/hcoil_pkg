@@ -7,6 +7,10 @@ def generate_launch_description():
             package="hcoil_pkg",
             namespace="psu_debug",
             executable="psu_node",
-            name="debug_psu"
+            name="debug_psu",
+            parameters=[
+                {"debugMode": True},
+                {"PSU_COM": "silly_name"}
+            ]
         )
     ])
