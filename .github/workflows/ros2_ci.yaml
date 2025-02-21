@@ -40,10 +40,11 @@ jobs:
 
       - name: Setup Dependencies
         run: | 
-          mkdir -p coil_libs/build
-          mkdir -p CppLinuxSerial/build
+
           git clone https://github.com/VFrancescon/coil_libs coil_libs
           git clone https://github.com/gbmhunter/CppLinuxSerial CppLinuxSerial
+          mkdir -p coil_libs/build
+          mkdir -p CppLinuxSerial/build
           cd CppLinuxSerial/build
           cmake ..
           make -j16 install
