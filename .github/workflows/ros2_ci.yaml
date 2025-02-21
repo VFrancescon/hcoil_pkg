@@ -47,11 +47,11 @@ jobs:
           mkdir -p CppLinuxSerial/build
           cd CppLinuxSerial/build
           cmake ..
-          make -j16 install
+          sudo make -j16 install
           cd ../../
           cd coil_libs/build
           cmake ..
-          make -j16 install
+          sudo make -j16 install
           cd ../../
           pwd
 
