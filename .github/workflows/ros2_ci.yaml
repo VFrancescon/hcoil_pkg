@@ -16,27 +16,27 @@ jobs:
 
     steps:
 
-      # - name: Install ROS2 Humble
-      #   run: |
-      #     # Ensure system is up-to-date
-      #     sudo apt update && sudo apt upgrade -y
+      - name: Install ROS2 Humble
+        run: |
+          # Ensure system is up-to-date
+          sudo apt update && sudo apt upgrade -y
           
-      #     # Install required tools
-      #     sudo apt install -y curl gnupg lsb-release
+          # Install required tools
+          sudo apt install -y curl gnupg lsb-release
 
-      #     # Add ROS2 repository key and source list
-      #     sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key | sudo apt-key add -
-      #     echo "deb http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/ros2.list
+          # Add ROS2 repository key and source list
+          sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key | sudo apt-key add -
+          echo "deb http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/ros2.list
           
-      #     # Update package list again
-      #     sudo apt update
+          # Update package list again
+          sudo apt update
 
-      #     # Install ROS2 Humble
-      #     sudo apt install -y ros-humble-desktop python3-colcon-common-extensions python3-rosdep python3-vcstool build-essential
+          # Install ROS2 Humble
+          sudo apt install -y ros-humble-ros-base ros-dev-tools python3-colcon-common-extensions python3-rosdep python3-vcstool build-essential
 
-      #     # Initialize rosdep
-      #     sudo rosdep init
-      #     rosdep update
+          # Initialize rosdep
+          sudo rosdep init
+          rosdep update
 
       - name: Setup Dependencies
         run: | 
@@ -56,37 +56,37 @@ jobs:
           pwd
 
 
-      # - name: Setup ROS Workspace
-      #   run: |
-      #     source /opt/ros/humble/setup.bash
-      #     mkdir -p ros_ws/src/hcoil_pkg
-      #     mkdir ros_ws/src/hcoil_interfaces
-      #     cd ros_ws
-      #     colcon build
-      #     source install/setup.bash
+      - name: Setup ROS Workspace
+        run: |
+          source /opt/ros/humble/setup.bash
+          mkdir -p ros_ws/src/hcoil_pkg
+          mkdir ros_ws/src/hcoil_interfaces
+          cd ros_ws
+          colcon build
+          source install/setup.bash
 
-      # - name: Checkout Repository
-      #   uses: actions/checkout@v4
-      #   with:
-      #     path: ros_ws/src/hcoil_pkg
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          path: ros_ws/src/hcoil_pkg
 
-      # - name: Clone hcoil_interfaces Repository
-      #   run: |
-      #     git clone https://github.com/VFrancescon/hcoil_interfaces ros_ws/src/hcoil_interfaces
+      - name: Clone hcoil_interfaces Repository
+        run: |
+          git clone https://github.com/VFrancescon/hcoil_interfaces ros_ws/src/hcoil_interfaces
 
-      # - name: Build ROS2 Package
-      #   run: |
-      #     source /opt/ros/humble/setup.bash  
-      #     colcon build --symlink-install
+      - name: Build ROS2 Package
+        run: |
+          source /opt/ros/humble/setup.bash  
+          colcon build --symlink-install
           
-      # - name: Run Tests
-      #   run: |
-      #     source /opt/ros/humble/setup.bash
-      #     colcon test --event-handlers console_cohesion+
+      - name: Run Tests
+        run: |
+          source /opt/ros/humble/setup.bash
+          colcon test --event-handlers console_cohesion+
 
-      # - name: Upload Test Results
-      #   if: always()
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: test-results
-      #     path: build/**/test_results/**/*.xml
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: build/**/test_results/**/*.xml
