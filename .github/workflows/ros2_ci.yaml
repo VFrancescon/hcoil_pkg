@@ -78,7 +78,6 @@ jobs:
           cd ros_ws
           pwd
           ls
-          rosdep install --from-paths src -y --ignore-src
           source /opt/ros/humble/setup.bash  
           colcon build --symlink-install
           
