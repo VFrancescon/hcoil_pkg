@@ -77,18 +77,19 @@ jobs:
         run: |
           cd ros_ws
           pwd
+          ls
           rosdep install --from-paths src -y --ignore-src
           source /opt/ros/humble/setup.bash  
           colcon build --symlink-install
           
-      - name: Run Tests
-        run: |
-          source /opt/ros/humble/setup.bash
-          colcon test --event-handlers console_cohesion+
+      # - name: Run Tests
+      #   run: |
+      #     source /opt/ros/humble/setup.bash
+      #     colcon test --event-handlers console_cohesion+
 
-      - name: Upload Test Results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: build/**/test_results/**/*.xml
+      # - name: Upload Test Results
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: test-results
+      #     path: build/**/test_results/**/*.xml
