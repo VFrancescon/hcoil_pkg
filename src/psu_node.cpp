@@ -16,16 +16,16 @@ PSU_Node::PSU_Node(): Node("psu_sub") {
 
 
 
-    // vi_sub_ = this->create_subscription<hcoil_interfaces::msg::VoltAmp>(
-    //     "mag_topic", 10, std::bind(&PSU_Node::callbackVIWrite, this, _1)
-    // );
+    vi_sub_ = this->create_subscription<hcoil_interfaces::msg::VoltAmp>(
+        "mag_topic", 10, std::bind(&PSU_Node::callbackVIWrite, this, _1)
+    );
 
-    // if(debugMode){
-    //     RCLCPP_INFO(this->get_logger(), "We are in debug mode");   
-    // } else {
-    //     PSU = std::make_unique<DXKDP_PSU>(COM_PORT, vConv, iConv);
+    if(debugMode){
+        RCLCPP_INFO(this->get_logger(), "We are in debug mode");   
+    } else {
+        PSU = std::make_unique<DXKDP_PSU>(COM_PORT, vConv, iConv);
 
-    // }
+    }
 
 }
 

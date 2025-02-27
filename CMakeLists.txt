@@ -27,9 +27,22 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
+find_library(MID HCoilMiddlewareLib )
+find_library(PSU  DxkdpLib )
+find_library(LINACT LinActuatorLib )
+find_library(TMETER LakeshoreF71Lib )
+find_library(SERIAL CppLinuxSerial )
+find_library( ASTAR a-star)
+
+set(MiddlewareLibs ${MID} ${PSU} ${LINACT} ${TMETER} ${SERIAL} Threads::Threads)
+set(PSULibs ${PSU} ${SERIAL})
+set(LinActLibs ${LINACT} ${SERIAL})
+set(TmeterLibs ${TMETER} ${SERIAL})
+
 
 add_executable(psu_node src/psu_node.cpp)
 ament_target_dependencies(psu_node rclcpp hcoil_interfaces)
+target_link_libraries(psu_node ${PSULibs})
 
 install(TARGETS
   psu_node

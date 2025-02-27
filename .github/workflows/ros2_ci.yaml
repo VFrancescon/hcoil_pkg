@@ -75,6 +75,8 @@ jobs:
 
       - name: Build ROS2 Package
         run: |
+          cd ros_ws
+          pwd
           rosdep install --from-paths src -y --ignore-src
           source /opt/ros/humble/setup.bash  
           colcon build --symlink-install
