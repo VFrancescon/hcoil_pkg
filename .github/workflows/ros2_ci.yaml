@@ -40,13 +40,12 @@ jobs:
 
       - name: Setup Dependencies
         run: | 
-
           git clone https://github.com/VFrancescon/coil_libs coil_libs
           git clone https://github.com/gbmhunter/CppLinuxSerial CppLinuxSerial
           mkdir -p coil_libs/build
           mkdir -p CppLinuxSerial/build
           cd CppLinuxSerial/build
-          cmake ..
+          cmake .. -DBUILD_TESTS=FALSE 
           sudo make -j16 install
           cd ../../
           cd coil_libs/build
@@ -76,6 +75,7 @@ jobs:
 
       - name: Build ROS2 Package
         run: |
+          rosdep install --from-paths src -y --ignore-src
           source /opt/ros/humble/setup.bash  
           colcon build --symlink-install
           
