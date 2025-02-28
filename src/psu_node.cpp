@@ -1,45 +1,43 @@
 #include "hcoil_pkg/psu_node.hpp"
 
-PSU_Node::PSU_Node(): Node("psu_sub") {
+PSU_Node::PSU_Node(const std::string &nodeName, const bool &debugMode)
+    : Node(nodeName) {
+    nodeName_ = nodeName;
+    
+    auto param_desc = rcl_interfaces::msg::ParameterDescriptor{};
+    param_desc.description = "Conversion values for Voltage and Current.";
+    param_desc.type = rcl_interfaces::msg::ParameterType::PARAMETER_DOUBLE;
 
-    // setup parameter for root address. Think memory addreses,
-    // this parameter gives you the entry point.
-    auto addr_desc = rcl_interfaces::msg::ParameterDescriptor{};
-    addr_desc.description = "Root Address for PSU.";
-    addr_desc.type = 4; // String. see rcl_interfaces/msg/ParameterType for reference.
-    this->declare_parameter("PSU_COM", "/dev/ttyUSB0", addr_desc);
+    this->declare_parameter("vConv", 0.01f, param_desc);
+    this->declare_parameter("iConv", 0.01f, param_desc);
 
-    auto debug_desc = rcl_interfaces::msg::ParameterDescriptor{};
-    debug_desc.description = "Toggle debug flag. If true, PSUs are never instantiated";
-    debug_desc.type = 1; // Bool. see rcl_interfaces/msg/ParameterType for reference.
-    this->declare_parameter("debugMode", false, debug_desc);
+    vConv_ = this->get_parameter("vConv").as_double();
+    iConv_ = this->get_parameter("iConv").as_double();
 
-
+    RCLCPP_INFO(this->get_logger(), "vConv %d", vConv_);
 
     vi_sub_ = this->create_subscription<hcoil_interfaces::msg::VoltAmp>(
-        "mag_topic", 10, std::bind(&PSU_Node::callbackVIWrite, this, _1)
-    );
+        nodeName_ + "/VI", 10, std::bind(&PSU_Node::callbackVIWrite, this, _1));
 
-    if(debugMode){
-        RCLCPP_INFO(this->get_logger(), "We are in debug mode");   
+    if (debugMode) {
+        RCLCPP_INFO(this->get_logger(), "We are in debug mode. test");
     } else {
-        PSU = std::make_unique<DXKDP_PSU>(COM_PORT, vConv, iConv);
-
+        PSU = std::make_unique<DXKDP_PSU>(COM_PORT_, vConv_, iConv_);
     }
-
 }
 
-void PSU_Node::callbackVIWrite(const hcoil_interfaces::msg::VoltAmp &msg){
-    RCLCPP_INFO(this->get_logger(), "I received a message V: %f, I: %f", msg.voltage, msg.current);
+void PSU_Node::callbackVIWrite(const hcoil_interfaces::msg::VoltAmp& msg) {
+    RCLCPP_INFO(this->get_logger(), "I received a message V: %f, I: %f",
+                msg.voltage, msg.current);
     return;
 }
 
-
-int main(int argc, char* argv[]){
-    rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<PSU_Node>());
-    rclcpp::shutdown();
-    return 0;
-}
-
+// #ifndef TESTING_EXCLUDE_MAIN
+// int main(int argc, char* argv[]){
+//     rclcpp::init(argc, argv);
+//     rclcpp::spin(std::make_shared<PSU_Node>("samefile_test", true));
+//     rclcpp::shutdown();
+//     return 0;
+// }
+// #endif
 

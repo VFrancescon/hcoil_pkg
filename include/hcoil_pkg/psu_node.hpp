@@ -11,28 +11,29 @@ using std::placeholders::_1;
 
 class PSU_Node : public rclcpp::Node
 {
-    public:
-        PSU_Node();
-    
+
     private:
-        std::string psu_addr_;
-        void callbackVIWrite(const hcoil_interfaces::msg::VoltAmp &msg);
         rclcpp::Subscription<hcoil_interfaces::msg::VoltAmp>::SharedPtr vi_sub_;
         std::unique_ptr<DXKDP_PSU> PSU;
+        void callbackVIWrite(const hcoil_interfaces::msg::VoltAmp &msg);
 
-        double currentI = 0.f, currentV = 0.f;   // internal values for cached I and V.
-        double vConv = 0.01f, iConv = 0.01f;       // minimum psu increment for voltage and current.
-        uint8_t currentPolarity;  // currently stored polarity
-        std::string nodeName;     // node name. Equal to PSU name.
-        std::string COM_PORT;     // node name. Equal to PSU name.
-        int RatedV = 50;          // PSU rated voltage
-        int RatedI = 30;          // PSU rated current
+    public:
+        PSU_Node(const std::string &nodeName, const bool &debugMode);   
+        std::string psu_addr_;
+        double currentI_ = 0.f, currentV_ = 0.f;   // internal values for cached I and V.
+        double vConv_ = 0.01f, iConv_ = 0.01f;       // minimum psu increment for voltage and current.
+        uint8_t currentPolarity_;  // currently stored polarity
+        std::string nodeName_;     // node name. Equal to PSU name.
+        std::string COM_PORT_;     // node name. Equal to PSU name.
+        int RatedV_ = 50;          // PSU rated voltage
+        int RatedI_ = 30;          // PSU rated current
 
         double vLimit;
         double iLimit;
-        bool debugMode = true;  // debug flag. If true, PSU is never instantiated
+        bool debugMode_ = true;  // debug flag. If true, PSU is never instantiated
                                 // and function calls are empty
 };  
 
-
-int main(int argc, char* argv[]);
+// #ifndef TESTING_EXCLUDE_MAIN
+// int main(int argc, char* argv[]);
+// #endif

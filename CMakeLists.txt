@@ -15,18 +15,6 @@ find_package(hcoil_interfaces REQUIRED)
 
 include_directories(include)
 
-if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  # the following line skips the linter which checks for copyrights
-  # comment the line when a copyright and license is added to all source files
-  set(ament_cmake_copyright_FOUND TRUE)
-  # the following line skips cpplint (only works in a git repo)
-  # comment the line when this package is in a git repo and when
-  # a copyright and license is added to all source files
-  set(ament_cmake_cpplint_FOUND TRUE)
-  ament_lint_auto_find_test_dependencies()
-endif()
-
 find_library(MID HCoilMiddlewareLib )
 find_library(PSU  DxkdpLib )
 find_library(LINACT LinActuatorLib )
@@ -40,14 +28,32 @@ set(LinActLibs ${LINACT} ${SERIAL})
 set(TmeterLibs ${TMETER} ${SERIAL})
 
 
-add_executable(psu_node src/psu_node.cpp)
-ament_target_dependencies(psu_node rclcpp hcoil_interfaces)
-target_link_libraries(psu_node ${PSULibs})
 
-install(TARGETS
-  psu_node
-  DESTINATION lib/${PROJECT_NAME}
-)
+if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
+  ament_add_gtest(${PROJECT_NAME}_psu_test 
+    test/psu_tests.cpp
+    src/psu_node.cpp
+  )
+  target_include_directories(${PROJECT_NAME}_psu_test PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+    include
+  )
+  ament_target_dependencies(${PROJECT_NAME}_psu_test
+    rclcpp 
+    hcoil_interfaces
+  )
+  target_link_libraries(${PROJECT_NAME}_psu_test ${PSULibs})
+else()
+  add_executable(psu_node src/psu_node.cpp)
+  ament_target_dependencies(psu_node rclcpp hcoil_interfaces)
+  target_link_libraries(psu_node ${PSULibs})
+  install(TARGETS
+    psu_node
+    DESTINATION lib/${PROJECT_NAME}
+  )
+endif()
 
 # Install launch files.
 install(DIRECTORY
