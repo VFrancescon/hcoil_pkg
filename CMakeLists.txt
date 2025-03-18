@@ -9,6 +9,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(hcoil_interfaces REQUIRED)    
+find_package(std_srvs REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -27,9 +28,8 @@ set(PSULibs ${PSU} ${SERIAL})
 set(LinActLibs ${LINACT} ${SERIAL})
 set(TmeterLibs ${TMETER} ${SERIAL})
 
-
-
 if(BUILD_TESTING)
+  message("HCOIL_PKG: Building tests")
   find_package(ament_cmake_gtest REQUIRED)
   ament_add_gtest(${PROJECT_NAME}_psu_test 
     test/psu_tests.cpp
@@ -43,11 +43,14 @@ if(BUILD_TESTING)
   ament_target_dependencies(${PROJECT_NAME}_psu_test
     rclcpp 
     hcoil_interfaces
+    std_srvs
   )
-  target_link_libraries(${PROJECT_NAME}_psu_test ${PSULibs})
+  target_link_libraries(${PROJECT_NAME}_psu_test ${PSULibs} )
+  target_compile_definitions(${PROJECT_NAME}_psu_test PRIVATE TESTING_EXCLUDE_MAIN=true)
 else()
+  message("HCOIL_PKG: Not building tests")
   add_executable(psu_node src/psu_node.cpp)
-  ament_target_dependencies(psu_node rclcpp hcoil_interfaces)
+  ament_target_dependencies(psu_node rclcpp hcoil_interfaces std_srvs)
   target_link_libraries(psu_node ${PSULibs})
   install(TARGETS
     psu_node
