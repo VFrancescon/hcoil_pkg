@@ -46,8 +46,8 @@ class PSU_Node : public rclcpp::Node {
     int RatedV_ = 50;          // PSU rated voltage
     int RatedI_ = 30;          // PSU rated current
 
-    double vLimit;
-    double iLimit;
+    double vLimit = RatedV_ * 0.8;
+    double iLimit = RatedI_ * 0.8;
     bool debugMode_ = true;  // debug flag. If true, PSU is never instantiated
                              // and function calls are empty
     bool POstate_ = false;   // Power Output status for the PSU

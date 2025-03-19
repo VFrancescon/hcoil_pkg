@@ -35,25 +35,51 @@ if(BUILD_TESTING)
     test/psu_tests.cpp
     src/psu_node.cpp
   )
+
+  ament_add_gtest(${PROJECT_NAME}_field_test 
+  test/field_tests.cpp
+  src/field_node.cpp
+  )
+
   target_include_directories(${PROJECT_NAME}_psu_test PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     include
   )
+
+  target_include_directories(${PROJECT_NAME}_field_test PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+  include
+  )
+
+
   ament_target_dependencies(${PROJECT_NAME}_psu_test
     rclcpp 
     hcoil_interfaces
     std_srvs
   )
+
+  ament_target_dependencies(${PROJECT_NAME}_field_test
+  rclcpp 
+  hcoil_interfaces
+  std_srvs
+  )
   target_link_libraries(${PROJECT_NAME}_psu_test ${PSULibs} )
+  target_link_libraries(${PROJECT_NAME}_field_test ${PSULibs} )
   target_compile_definitions(${PROJECT_NAME}_psu_test PRIVATE TESTING_EXCLUDE_MAIN=true)
+  target_compile_definitions(${PROJECT_NAME}_field_test PRIVATE TESTING_EXCLUDE_MAIN=true)
 else()
   message("HCOIL_PKG: Not building tests")
   add_executable(psu_node src/psu_node.cpp)
+  add_executable(field_node src/field_node.cpp)
   ament_target_dependencies(psu_node rclcpp hcoil_interfaces std_srvs)
+  ament_target_dependencies(field_node rclcpp hcoil_interfaces std_srvs)
   target_link_libraries(psu_node ${PSULibs})
+  target_link_libraries(field_node ${PSULibs})
   install(TARGETS
     psu_node
+    field_node
     DESTINATION lib/${PROJECT_NAME}
   )
 endif()

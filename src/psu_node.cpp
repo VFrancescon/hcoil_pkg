@@ -72,7 +72,7 @@ void PSU_Node::callbackVIWrite(const hcoil_interfaces::msg::VoltAmp& msg) {
                  *
                  * On the original power supplies (now PSU2, PSU4), 0x00 ->
                  * Positive output, 0x01 -> Negative output. And arguments 0x02
-                 * and 0x03 actuall trigger an error.
+                 * and 0x03 actually trigger an error.
                  *
                  * On PSU3, there is no polarity interface altogether, the sign
                  * of the output current is determined by the sign of the
@@ -123,7 +123,7 @@ void PSU_Node::callbackVIWrite(const hcoil_interfaces::msg::VoltAmp& msg) {
                 break;
         }
     } else {
-        RCLCPP_INFO(this->get_logger(), "No need to act");
+        RCLCPP_INFO(this->get_logger(), "Debug mode on. No need to act");
     }
 
     currentV_ = msg.voltage;
