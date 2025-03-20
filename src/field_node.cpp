@@ -59,6 +59,49 @@ FieldNode::FieldNode(const std::string& nodeName, rclcpp::NodeOptions& options)
 }
 
 void FieldNode::callbackField(const hcoil_interfaces::msg::MagField& msg) {
+    bool x_change = abs(msg.bx - bx_) > maxChange_;
+    bool y_change = abs(msg.by - by_) > maxChange_;
+    bool z_change = abs(msg.bz - bz_) > maxChange_;
+    try {
+        if (x_change) {
+            throw field_exceptions::ChangeException(
+                "Change in x field exceeds boundary of 15mT, exiting. Please "
+                "restart the "
+                "node");
+        }
+        if (y_change) {
+            throw field_exceptions::ChangeException(
+                "Change in y field  exceeds boundary of 15mT, exiting. Please "
+                "restart the node");
+        }
+        if (z_change) {
+            throw field_exceptions::ChangeException(
+                "Change in z field  exceeds boundary of 15mT, exiting. Please "
+                "restart the node");
+        }
+        if (abs(msg.bx) > this->maxField_) {
+            throw field_exceptions::maxFieldException(
+                "Field in x axis  exceeds boundary of 22mT, exiting. Please "
+                "restart the node");
+        }
+        if (abs(msg.by) > this->maxField_) {
+            throw field_exceptions::maxFieldException(
+                "Field in y axis  exceeds boundary of 22mT, exiting. Please "
+                "restart the node");
+        }
+        if (abs(msg.bz) > this->maxField_) {
+            throw field_exceptions::maxFieldException(
+                "Field in z axis exceeds boundary of 22mT, exiting. Please "
+                "restart the node");
+        }
+    } catch (field_exceptions::ChangeException& e) {
+        RCLCPP_ERROR(this->get_logger(), "ChangeException: %s", e.what());
+        rclcpp::shutdown();
+    } catch (field_exceptions::maxFieldException& e) {
+        RCLCPP_ERROR(this->get_logger(), "ChangeException: %s", e.what());
+        rclcpp::shutdown();
+    }
+
     bx_ = msg.bx;
     by_ = msg.by;
     bz_ = msg.bz;

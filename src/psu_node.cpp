@@ -4,7 +4,7 @@ PSU_Node::PSU_Node(const std::string& nodeName, const bool& debugMode)
     : Node(nodeName) {
     nodeName_ = std::string(this->get_name()) ;
 
-    RCLCPP_INFO(this->get_logger(), "%s", nodeName_.c_str());
+    // RCLCPP_INFO(this->get_logger(), "%s", nodeName_.c_str());
 
     auto param_desc = rcl_interfaces::msg::ParameterDescriptor{};
     param_desc.description = "Conversion values for Voltage and Current.";
@@ -51,7 +51,7 @@ PSU_Node::PSU_Node(const std::string& nodeName, const bool& debugMode)
         std::bind(&PSU_Node::p_off_callback, this, _1, _2));
 
     if (debugMode) {
-        RCLCPP_INFO(this->get_logger(), "We are in debug mode. test");
+        RCLCPP_INFO(this->get_logger(), "We are in debug mode.");
     } else {
         PSU = std::make_unique<DXKDP_PSU>(COM_PORT_, vConv_, iConv_);
     }
