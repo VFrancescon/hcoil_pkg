@@ -103,34 +103,34 @@ class FieldNode : public rclcpp::Node {
       * @brief Messages containing voltage and current data.
       */
      std::vector<hcoil_interfaces::msg::VoltAmp> vi_msgs_;
-   private:
-    // subscribers
-    rclcpp::Subscription<hcoil_interfaces::msg::MagField>::SharedPtr field_sub_;
-    // publishers
-    std::vector<rclcpp::Publisher<hcoil_interfaces::msg::VoltAmp>::SharedPtr>
-        vi_pubs_;
+//    private:
+//     // subscribers
+//     rclcpp::Subscription<hcoil_interfaces::msg::MagField>::SharedPtr field_sub_;
+//     // publishers
+//     std::vector<rclcpp::Publisher<hcoil_interfaces::msg::VoltAmp>::SharedPtr>
+//         vi_pubs_;
 
-   public:
-    FieldNode(const std::string &nodeName, rclcpp::NodeOptions &options);
-    // FieldNode(const std::string &nodeName, rclcpp::NodeOptions &options);
+//    public:
+//     FieldNode(const std::string &nodeName, rclcpp::NodeOptions &options);
+//     // FieldNode(const std::string &nodeName, rclcpp::NodeOptions &options);
 
-    void callbackField(const hcoil_interfaces::msg::MagField &msg);
+//     void callbackField(const hcoil_interfaces::msg::MagField &msg);
 
-    std::string xRoot_, yRoot_, zRoot_;
-    int xNum_ = 2, yNum_ = 2, zNum_ = 2;
-    std::vector<std::string> xAddress_, yAddress_, zAddress_;
-    std::vector<std::string> allAddress_;
+//     std::string xRoot_, yRoot_, zRoot_;
+//     int xNum_ = 2, yNum_ = 2, zNum_ = 2;
+//     std::vector<std::string> xAddress_, yAddress_, zAddress_;
+//     std::vector<std::string> allAddress_;
 
-    float cal_x_ = 0.542;  //!< Bx calibration factor. Units are mT/A
-    float cal_y_ = 1.07;   //!< By calibration factor. Units are mT/A
-    float cal_z_ = 0.633;  //!< Bz calibration factor. Units are mT/A
-    float ix_ = 0, iy_ = 0, iz_ = 0;
-    float bx_ = 0, by_ = 0, bz_ = 0;
-    int maxField_ = 22;
-    int maxChange_ =
-        15;  //!< Maximum change in current allowed per cycle. Units are A
-    int adv_num_;
-    std::vector<hcoil_interfaces::msg::VoltAmp> vi_msgs_;
+//     float cal_x_ = 0.542;  //!< Bx calibration factor. Units are mT/A
+//     float cal_y_ = 1.07;   //!< By calibration factor. Units are mT/A
+//     float cal_z_ = 0.633;  //!< Bz calibration factor. Units are mT/A
+//     float ix_ = 0, iy_ = 0, iz_ = 0;
+//     float bx_ = 0, by_ = 0, bz_ = 0;
+//     int maxField_ = 22;
+//     int maxChange_ =
+//         15;  //!< Maximum change in current allowed per cycle. Units are A
+//     int adv_num_;
+//     std::vector<hcoil_interfaces::msg::VoltAmp> vi_msgs_;
 };
 
 namespace field_exceptions {
