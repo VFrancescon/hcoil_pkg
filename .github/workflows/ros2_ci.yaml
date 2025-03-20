@@ -58,26 +58,24 @@ jobs:
       - name: Setup ROS Workspace
         run: |
           source /opt/ros/humble/setup.bash
-          mkdir -p ros_ws/src/hcoil_pkg
-          mkdir ros_ws/src/hcoil_interfaces
-          cd ros_ws
+          mkdir -p ~/ros_ws/src/hcoil_pkg
+          mkdir ~/ros_ws/src/hcoil_interfaces
+          cd ~/ros_ws
           colcon build
           source install/setup.bash
 
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          path: ros_ws/src/hcoil_pkg
+          path: ~/ros_ws/src/hcoil_pkg
 
       - name: Clone hcoil_interfaces Repository
         run: |
-          git clone https://github.com/VFrancescon/hcoil_interfaces ros_ws/src/hcoil_interfaces
+          git clone https://github.com/VFrancescon/hcoil_interfaces ~/ros_ws/src/hcoil_interfaces
 
       - name: Build ROS2 Package
         run: |
-          cd ros_ws
-          pwd
-          ls
+          cd ~/ros_ws
           source /opt/ros/humble/setup.bash  
           colcon build --symlink-install
           
