@@ -21,7 +21,6 @@ find_library(PSU DxkdpLib)
 find_library(LINACT LinActuatorLib)
 find_library(TMETER LakeshoreF71Lib)
 find_library(SERIAL CppLinuxSerial)
-find_library(ASTAR a-star)
 
 set(MiddlewareLibs ${MID} ${PSU} ${LINACT} ${TMETER} ${SERIAL} Threads::Threads)
 set(PSULibs ${PSU} ${SERIAL})
