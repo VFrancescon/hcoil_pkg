@@ -70,7 +70,6 @@ void FieldNode::callbackField(const hcoil_interfaces::msg::MagField& msg) {
         vi_msgs_[i].current = ix_;
         vi_msgs_[i].voltage =
             std::min((abs(ix_) < 3 ? abs(ix_) * 1.8 : abs(ix_) * 1.2), 50.0);
-        // vi_msgs_[i].voltage = abs(ix_);
         if (xNum_ != 2) {
             vi_msgs_[i].voltage *= 1.2;
         }
@@ -83,13 +82,11 @@ void FieldNode::callbackField(const hcoil_interfaces::msg::MagField& msg) {
         if (yNum_ != 2) {
             vi_msgs_[i + xNum_].voltage *= 1.2;
         }
-        // if(i == 0) vi_msgs_[i + xNum_].current *= -1;
     }
     for (int i = 0; i < zNum_; i++) {
         vi_msgs_[i + xNum_ + yNum_].current = iz_;
         vi_msgs_[i + xNum_ + yNum_].voltage =
             std::min((abs(iz_) < 3 ? abs(iz_) * 1.8 : abs(iz_) * 1.2), 50.0);
-        // vi_msgs_[i + xNum_ + yNum].voltage = abs(iz_);
         if (zNum_ != 2) {
             vi_msgs_[i + xNum_ + yNum_].voltage *= 1.2;
         }

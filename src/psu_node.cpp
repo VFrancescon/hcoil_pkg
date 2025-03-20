@@ -2,7 +2,9 @@
 
 PSU_Node::PSU_Node(const std::string& nodeName, const bool& debugMode)
     : Node(nodeName) {
-    nodeName_ = nodeName;
+    nodeName_ = std::string(this->get_name()) ;
+
+    RCLCPP_INFO(this->get_logger(), "%s", nodeName_.c_str());
 
     auto param_desc = rcl_interfaces::msg::ParameterDescriptor{};
     param_desc.description = "Conversion values for Voltage and Current.";
@@ -14,16 +16,38 @@ PSU_Node::PSU_Node(const std::string& nodeName, const bool& debugMode)
     vConv_ = this->get_parameter("vConv").as_double();
     iConv_ = this->get_parameter("iConv").as_double();
 
-    RCLCPP_INFO(this->get_logger(), "vConv %f", vConv_);
+    auto rated_param_desc = rcl_interfaces::msg::ParameterDescriptor{};
+    rated_param_desc.description =
+        "Rated V and I for the supply. Maximum allowed value is 80% * Rated";
+    rated_param_desc.type = rcl_interfaces::msg::ParameterType::PARAMETER_INTEGER;
+
+    this->declare_parameter("RatedV", 50, rated_param_desc);
+    this->declare_parameter("RatedI", 30, rated_param_desc);
+    RatedV_ = this->get_parameter("RatedV").as_int();
+    RatedI_ = this->get_parameter("RatedI").as_int();
+
+    auto com_port_param_desc = rcl_interfaces::msg::ParameterDescriptor{};
+    com_port_param_desc.description = "Serial port for the PSU communication.";
+    com_port_param_desc.type = rcl_interfaces::msg::ParameterType::PARAMETER_STRING;
+
+    this->declare_parameter("COM_PORT", "/dev/ttyUSB0", com_port_param_desc);
+    COM_PORT_ = this->get_parameter("COM_PORT").as_string();
+
+    auto debug_mode_param_desc = rcl_interfaces::msg::ParameterDescriptor{};
+    debug_mode_param_desc.description = "Enable or disable debug mode.";
+    debug_mode_param_desc.type = rcl_interfaces::msg::ParameterType::PARAMETER_BOOL;
+
+    this->declare_parameter("debugMode", true, debug_mode_param_desc);
+    debugMode_ = this->get_parameter("debugMode").as_bool();
 
     vi_sub_ = this->create_subscription<hcoil_interfaces::msg::VoltAmp>(
-        nodeName_ + "/VI", 10, std::bind(&PSU_Node::callbackVIWrite, this, _1));
+        "/VI/" + nodeName_, 10, std::bind(&PSU_Node::callbackVIWrite, this, _1));
 
     pOn_service_ = this->create_service<std_srvs::srv::Trigger>(
-        nodeName_ + "/PowerOn",
+        "/PowerOn" + nodeName_ ,
         std::bind(&PSU_Node::p_on_callback, this, _1, _2));
     pOff_service_ = this->create_service<std_srvs::srv::Trigger>(
-        nodeName_ + "/PowerOff",
+        "/PowerOff" + nodeName_ ,
         std::bind(&PSU_Node::p_off_callback, this, _1, _2));
 
     if (debugMode) {

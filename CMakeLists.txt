@@ -28,6 +28,8 @@ set(PSULibs ${PSU} ${SERIAL})
 set(LinActLibs ${LINACT} ${SERIAL})
 set(TmeterLibs ${TMETER} ${SERIAL})
 
+option(BUILD_TESTING "Enable testing" OFF)
+
 if(BUILD_TESTING)
   message("HCOIL_PKG: Building tests")
   find_package(ament_cmake_gtest REQUIRED)

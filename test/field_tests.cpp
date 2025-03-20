@@ -54,19 +54,15 @@ TEST_F(TestFieldNode, SubscriberExists) {
     ASSERT_EQ(check_bx && check_bz, true);
 }
 
-TEST_F(TestFieldNode, PublishersExist){
-    
-    
-    
+TEST_F(TestFieldNode, PublishersExist) {
     auto vi_sub = node->create_subscription<hcoil_interfaces::msg::VoltAmp>(
-        "VI/PSU0", 10, [](const hcoil_interfaces::msg::VoltAmp::SharedPtr
-        msg) {
+        "VI/PSU0", 10, [](const hcoil_interfaces::msg::VoltAmp::SharedPtr msg) {
             ASSERT_GT(msg->voltage, 22);
             ASSERT_GT(msg->current, 18);
         });
 
-    auto field_pub = node->create_publisher<hcoil_interfaces::msg::MagField>(
-        "magfield", 10);
+    auto field_pub =
+        node->create_publisher<hcoil_interfaces::msg::MagField>("magfield", 10);
 
     auto field_msg = hcoil_interfaces::msg::MagField();
     field_msg.bx = 10.0;
@@ -75,9 +71,7 @@ TEST_F(TestFieldNode, PublishersExist){
 
     field_pub->publish(field_msg);
     rclcpp::spin_some(node);
-
 }
-
 
 int main(int argc, char* argv[]) {
     testing::InitGoogleTest(&argc, argv);

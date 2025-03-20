@@ -34,7 +34,7 @@ TEST_F(TestPsuNode, TestGen2Call) {
     vi_msg.current = 1.5;
 
     auto vi_pub = node->create_publisher<hcoil_interfaces::msg::VoltAmp>(
-        node_name + "/VI", 10);
+        "/VI/" + node_name, 10);
     vi_pub->publish(vi_msg);
 
     rclcpp::spin_some(node);
@@ -45,7 +45,7 @@ TEST_F(TestPsuNode, TestGen2Call) {
 
 TEST_F(TestPsuNode, PSU_ON) {
     auto turn_on_srv =
-        node->create_client<std_srvs::srv::Trigger>(node_name + "/PowerOn");
+        node->create_client<std_srvs::srv::Trigger>("/PowerOn" + node_name);
     auto future = turn_on_srv->async_send_request(
         std::make_shared<std_srvs::srv::Trigger::Request>());
     rclcpp::spin_some(node);
@@ -55,7 +55,7 @@ TEST_F(TestPsuNode, PSU_ON) {
 
 TEST_F(TestPsuNode, PSU_OFF) {
     auto turn_off_srv =
-        node->create_client<std_srvs::srv::Trigger>(node_name + "/PowerOff");
+        node->create_client<std_srvs::srv::Trigger>("/PowerOff" + node_name);
     auto future = turn_off_srv->async_send_request(
         std::make_shared<std_srvs::srv::Trigger::Request>());
     rclcpp::spin_some(node);
