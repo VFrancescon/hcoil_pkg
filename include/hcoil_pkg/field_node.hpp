@@ -20,7 +20,8 @@ class FieldNode : public rclcpp::Node {
         vi_pubs_;
 
    public:
-    FieldNode(const std::string &nodeName);
+    FieldNode(const std::string &nodeName, rclcpp::NodeOptions &options);
+    // FieldNode(const std::string &nodeName, rclcpp::NodeOptions &options);
 
     void callbackField(const hcoil_interfaces::msg::MagField &msg);
 

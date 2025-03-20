@@ -42,13 +42,13 @@ void PSU_Node::callbackVIWrite(const hcoil_interfaces::msg::VoltAmp& msg) {
             throw psuExceptions::OverVoltage("Over voltage limit");
         if (abs(msg.current) > iLimit)
             throw psuExceptions::OverCurrent("Over current limit");
-    } catch (psuExceptions::OverVoltage) {
+    } catch (const psuExceptions::OverVoltage& e) {
         std::string outputBuff =
             nodeName_ + ": requested V: " + std::to_string(msg.voltage) +
             "V exceeds limit of " + std::to_string(vLimit) +
             " Over voltage limit";
         throw(std::runtime_error(outputBuff));
-    } catch (psuExceptions::OverCurrent) {
+    } catch (const psuExceptions::OverCurrent& e) {
         std::string outputBuff =
             nodeName_ + ": requested I: " + std::to_string(msg.current) +
             "A exceeds limit of " + std::to_string(iLimit) +
@@ -132,7 +132,7 @@ void PSU_Node::callbackVIWrite(const hcoil_interfaces::msg::VoltAmp& msg) {
 }
 
 void PSU_Node::p_on_callback(
-    const std::shared_ptr<std_srvs::srv::Trigger::Request> req,
+    const std::shared_ptr<std_srvs::srv::Trigger::Request> /*req*/,
     std::shared_ptr<std_srvs::srv::Trigger::Response> res) {
     if (POstate_ != true) {
         POstate_ = true;
@@ -146,7 +146,7 @@ void PSU_Node::p_on_callback(
 }
 
 void PSU_Node::p_off_callback(
-    const std::shared_ptr<std_srvs::srv::Trigger::Request> req,
+    const std::shared_ptr<std_srvs::srv::Trigger::Request> /*req*/,
     std::shared_ptr<std_srvs::srv::Trigger::Response> res) {
     if (POstate_ != false) {
         POstate_ = false;

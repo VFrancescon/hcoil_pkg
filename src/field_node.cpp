@@ -1,6 +1,7 @@
 #include "hcoil_pkg/field_node.hpp"
 
-FieldNode::FieldNode(const std::string& nodeName) : rclcpp::Node(nodeName) {
+FieldNode::FieldNode(const std::string& nodeName, rclcpp::NodeOptions& options)
+    : rclcpp::Node(nodeName, options) {
     // PSU number parameter declaration
     auto num_param_desc = rcl_interfaces::msg::ParameterDescriptor{};
     num_param_desc.description = "Number of supplies in given axis";
@@ -26,8 +27,8 @@ FieldNode::FieldNode(const std::string& nodeName) : rclcpp::Node(nodeName) {
 
     for (int i = 0; i < xNum_; i++) {
         std::string modified_string = xRoot_;
-        modified_string.back() =
-            '0' + i;  // Replace the last character with the value of i
+        modified_string.back() +=
+            i;  // Replace the last character with the value of i
         xAddress_.push_back("VI/" + modified_string);
     }
     for (int i = 0; i < yNum_; i++) {
@@ -50,18 +51,22 @@ FieldNode::FieldNode(const std::string& nodeName) : rclcpp::Node(nodeName) {
         "magfield", 10, std::bind(&FieldNode::callbackField, this, _1));
     adv_num_ = allAddress_.size();
     vi_pubs_.resize(adv_num_);
-    for (size_t i = 0; i < adv_num_; i++) {
+    vi_msgs_.resize(adv_num_);  // Ensure vi_msgs_ is properly initialized
+    for (int i = 0; i < adv_num_; i++) {
         vi_pubs_[i] = this->create_publisher<hcoil_interfaces::msg::VoltAmp>(
             allAddress_[i], 10);
     }
 }
 
 void FieldNode::callbackField(const hcoil_interfaces::msg::MagField& msg) {
-    ix_ = msg.bx / cal_x_;
-    iy_ = msg.by / cal_y_;
-    iz_ = msg.bz / cal_z_;
+    bx_ = msg.bx;
+    by_ = msg.by;
+    bz_ = msg.bz;
+    ix_ = bx_ / cal_x_;
+    iy_ = by_ / cal_y_;
+    iz_ = bz_ / cal_z_;
 
-    for (size_t i = 0; i < xNum_; i++) {
+    for (int i = 0; i < xNum_; i++) {
         vi_msgs_[i].current = ix_;
         vi_msgs_[i].voltage =
             std::min((abs(ix_) < 3 ? abs(ix_) * 1.8 : abs(ix_) * 1.2), 50.0);
@@ -70,7 +75,7 @@ void FieldNode::callbackField(const hcoil_interfaces::msg::MagField& msg) {
             vi_msgs_[i].voltage *= 1.2;
         }
     }
-    for (size_t i = 0; i < yNum_; i++) {
+    for (int i = 0; i < yNum_; i++) {
         vi_msgs_[i + xNum_].current = iy_;
         vi_msgs_[i + xNum_].voltage =
             std::min((abs(iy_) < 3 ? abs(iy_) * 1.8 : abs(iy_) * 1.2), 50.0);
@@ -80,7 +85,7 @@ void FieldNode::callbackField(const hcoil_interfaces::msg::MagField& msg) {
         }
         // if(i == 0) vi_msgs_[i + xNum_].current *= -1;
     }
-    for (size_t i = 0; i < zNum_; i++) {
+    for (int i = 0; i < zNum_; i++) {
         vi_msgs_[i + xNum_ + yNum_].current = iz_;
         vi_msgs_[i + xNum_ + yNum_].voltage =
             std::min((abs(iz_) < 3 ? abs(iz_) * 1.8 : abs(iz_) * 1.2), 50.0);
@@ -89,7 +94,7 @@ void FieldNode::callbackField(const hcoil_interfaces::msg::MagField& msg) {
             vi_msgs_[i + xNum_ + yNum_].voltage *= 1.2;
         }
     }
-    for(size_t i = 0; i < adv_num_; i++){
+    for (int i = 0; i < adv_num_; i++) {
         vi_pubs_[i]->publish(vi_msgs_[i]);
     }
 }
@@ -97,7 +102,8 @@ void FieldNode::callbackField(const hcoil_interfaces::msg::MagField& msg) {
 #ifndef TESTING_EXCLUDE_MAIN
 int main(int argc, char* argv[]) {
     rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<FieldNode>("field_test"));
+    rclcpp::NodeOptions opt;
+    rclcpp::spin(std::make_shared<FieldNode>("field_test", opt));
     rclcpp::shutdown();
     return 0;
 }
