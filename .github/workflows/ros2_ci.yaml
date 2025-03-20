@@ -13,21 +13,6 @@ jobs:
     steps:
 
 
-      - name: Setup Dependencies
-        run: | 
-          git clone https://github.com/VFrancescon/coil_libs coil_libs
-          git clone https://github.com/gbmhunter/CppLinuxSerial CppLinuxSerial
-          mkdir -p coil_libs/build
-          mkdir -p CppLinuxSerial/build
-          cd CppLinuxSerial/build
-          cmake .. -DBUILD_TESTS=FALSE 
-          sudo make -j16 install
-          cd ../../
-          cd coil_libs/build
-          cmake ..
-          sudo make -j16 install
-          cd ~
-
 
       # Create workspace layout
       - name: Prepare workspace
@@ -59,6 +44,21 @@ jobs:
           sudo rosdep init || true
           rosdep update
 
+      - name: Setup Dependencies
+        run: | 
+          git clone https://github.com/VFrancescon/coil_libs coil_libs
+          git clone https://github.com/gbmhunter/CppLinuxSerial CppLinuxSerial
+          mkdir -p coil_libs/build
+          mkdir -p CppLinuxSerial/build
+          cd CppLinuxSerial/build
+          cmake .. -DBUILD_TESTS=FALSE 
+          sudo make -j16 install
+          cd ../../
+          cd coil_libs/build
+          cmake ..
+          sudo make -j16 install
+          cd ~
+        
       # Build both packages and run tests
       - name: Build and Test
         shell: bash
