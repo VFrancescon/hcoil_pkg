@@ -47,7 +47,7 @@ FieldNode::FieldNode(const std::string& nodeName, rclcpp::NodeOptions& options)
     allAddress_.insert(allAddress_.end(), yAddress_.begin(), yAddress_.end());
     allAddress_.insert(allAddress_.end(), zAddress_.begin(), zAddress_.end());
 
-    field_sub_ = this->create_subscription<hcoil_interfaces::msg::MagField>(
+    field_sub_ = this->create_subscription<magnetic_tentacle_interfaces::msg::MagneticField>(
         "magfield", 10, std::bind(&FieldNode::callbackField, this, _1));
     adv_num_ = allAddress_.size();
     vi_pubs_.resize(adv_num_);
@@ -58,10 +58,10 @@ FieldNode::FieldNode(const std::string& nodeName, rclcpp::NodeOptions& options)
     }
 }
 
-void FieldNode::callbackField(const hcoil_interfaces::msg::MagField& msg) {
-    bool x_change = abs(msg.bx - bx_) > maxChange_;
-    bool y_change = abs(msg.by - by_) > maxChange_;
-    bool z_change = abs(msg.bz - bz_) > maxChange_;
+void FieldNode::callbackField(const magnetic_tentacle_interfaces::msg::MagneticField& msg) {
+    bool x_change = abs(msg.vector.x - bx_) > maxChange_;
+    bool y_change = abs(msg.vector.y - by_) > maxChange_;
+    bool z_change = abs(msg.vector.z - bz_) > maxChange_;
     try {
         if (x_change) {
             throw field_exceptions::ChangeException(
@@ -79,17 +79,17 @@ void FieldNode::callbackField(const hcoil_interfaces::msg::MagField& msg) {
                 "Change in z field  exceeds boundary of 15mT, exiting. Please "
                 "restart the node");
         }
-        if (abs(msg.bx) > this->maxField_) {
+        if (abs(msg.vector.x) > this->maxField_) {
             throw field_exceptions::maxFieldException(
                 "Field in x axis  exceeds boundary of 22mT, exiting. Please "
                 "restart the node");
         }
-        if (abs(msg.by) > this->maxField_) {
+        if (abs(msg.vector.y) > this->maxField_) {
             throw field_exceptions::maxFieldException(
                 "Field in y axis  exceeds boundary of 22mT, exiting. Please "
                 "restart the node");
         }
-        if (abs(msg.bz) > this->maxField_) {
+        if (abs(msg.vector.z) > this->maxField_) {
             throw field_exceptions::maxFieldException(
                 "Field in z axis exceeds boundary of 22mT, exiting. Please "
                 "restart the node");
@@ -102,9 +102,9 @@ void FieldNode::callbackField(const hcoil_interfaces::msg::MagField& msg) {
         rclcpp::shutdown();
     }
 
-    bx_ = msg.bx;
-    by_ = msg.by;
-    bz_ = msg.bz;
+    bx_ = msg.vector.x;
+    by_ = msg.vector.y;
+    bz_ = msg.vector.z;
     ix_ = bx_ / cal_x_;
     iy_ = by_ / cal_y_;
     iz_ = bz_ / cal_z_;

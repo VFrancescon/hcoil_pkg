@@ -4,6 +4,7 @@
 
 #include "hcoil_interfaces/msg/mag_field.hpp"
 #include "hcoil_interfaces/msg/volt_amp.hpp"
+#include "magnetic_tentacle_interfaces/msg/magnetic_field.hpp"
 #include "rcl_interfaces/msg/parameter_type.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
@@ -24,7 +25,7 @@ class FieldNode : public rclcpp::Node {
      /**
       * @brief Subscriber for magnetic field messages.
       */
-     rclcpp::Subscription<hcoil_interfaces::msg::MagField>::SharedPtr field_sub_;
+     rclcpp::Subscription<magnetic_tentacle_interfaces::msg::MagneticField>::SharedPtr field_sub_;
 
      /**
       * @brief Publishers for voltage and current messages.
@@ -45,7 +46,7 @@ class FieldNode : public rclcpp::Node {
       * 
       * @param msg The received magnetic field message.
       */
-     void callbackField(const hcoil_interfaces::msg::MagField &msg);
+     void callbackField(const magnetic_tentacle_interfaces::msg::MagneticField &msg);
 
      /**
       * @brief Root addresses for x, y, and z axes.
@@ -105,7 +106,7 @@ class FieldNode : public rclcpp::Node {
      std::vector<hcoil_interfaces::msg::VoltAmp> vi_msgs_;
 //    private:
 //     // subscribers
-//     rclcpp::Subscription<hcoil_interfaces::msg::MagField>::SharedPtr field_sub_;
+//     rclcpp::Subscription<magnetic_tentacle_interfaces::msg::MagneticField>::SharedPtr field_sub_;
 //     // publishers
 //     std::vector<rclcpp::Publisher<hcoil_interfaces::msg::VoltAmp>::SharedPtr>
 //         vi_pubs_;
@@ -114,7 +115,7 @@ class FieldNode : public rclcpp::Node {
 //     FieldNode(const std::string &nodeName, rclcpp::NodeOptions &options);
 //     // FieldNode(const std::string &nodeName, rclcpp::NodeOptions &options);
 
-//     void callbackField(const hcoil_interfaces::msg::MagField &msg);
+//     void callbackField(const magnetic_tentacle_interfaces::msg::MagneticField &msg);
 
 //     std::string xRoot_, yRoot_, zRoot_;
 //     int xNum_ = 2, yNum_ = 2, zNum_ = 2;

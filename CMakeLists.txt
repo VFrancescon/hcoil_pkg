@@ -9,6 +9,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(hcoil_interfaces REQUIRED)
+find_package(magnetic_tentacle_interfaces REQUIRED)
 find_package(std_srvs REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
@@ -63,6 +64,7 @@ if(BUILD_TESTING)
   ament_target_dependencies(${PROJECT_NAME}_field_test
     rclcpp
     hcoil_interfaces
+    magnetic_tentacle_interfaces
     std_srvs
   )
 
@@ -76,7 +78,7 @@ if(BUILD_TESTING)
   add_executable(psu_node src/psu_node.cpp)
   add_executable(field_node src/field_node.cpp)
   ament_target_dependencies(psu_node rclcpp hcoil_interfaces std_srvs)
-  ament_target_dependencies(field_node rclcpp hcoil_interfaces std_srvs)
+  ament_target_dependencies(field_node rclcpp hcoil_interfaces magnetic_tentacle_interfaces std_srvs)
   target_link_libraries(psu_node ${PSULibs})
   target_link_libraries(field_node ${PSULibs})
   install(TARGETS

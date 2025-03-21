@@ -11,6 +11,7 @@
   
   <depend>rclcpp</depend>
   <depend>hcoil_interfaces</depend>
+  <depend>magnetic_tentacle_interfaces</depend>
   <depend>std_srvs</depend>
 
   <test_depend>ament_lint_auto</test_depend>
