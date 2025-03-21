@@ -1,7 +1,8 @@
 #include "hcoil_pkg/field_node.hpp"
 
 FieldNode::FieldNode(const std::string& nodeName, rclcpp::NodeOptions& options)
-    : rclcpp::Node(nodeName, options) {
+    : rclcpp::Node(nodeName, options),
+      MagneticEmitterBase(MagneticEmitterBase::SourceType::Coils) {
     // PSU number parameter declaration
     auto num_param_desc = rcl_interfaces::msg::ParameterDescriptor{};
     num_param_desc.description = "Number of supplies in given axis";
@@ -47,7 +48,8 @@ FieldNode::FieldNode(const std::string& nodeName, rclcpp::NodeOptions& options)
     allAddress_.insert(allAddress_.end(), yAddress_.begin(), yAddress_.end());
     allAddress_.insert(allAddress_.end(), zAddress_.begin(), zAddress_.end());
 
-    field_sub_ = this->create_subscription<magnetic_tentacle_interfaces::msg::MagneticField>(
+    field_sub_ = this->create_subscription<
+        magnetic_tentacle_interfaces::msg::MagneticField>(
         "magfield", 10, std::bind(&FieldNode::callbackField, this, _1));
     adv_num_ = allAddress_.size();
     vi_pubs_.resize(adv_num_);
@@ -56,9 +58,30 @@ FieldNode::FieldNode(const std::string& nodeName, rclcpp::NodeOptions& options)
         vi_pubs_[i] = this->create_publisher<hcoil_interfaces::msg::VoltAmp>(
             allAddress_[i], 10);
     }
+    computeField_srv_ = this->create_service<
+        magnetic_tentacle_interfaces::srv::ComputeMagneticField>(
+        compute_service_addr,
+        std::bind(&FieldNode::computeField_callback, this, _1, _2));
 }
 
-void FieldNode::callbackField(const magnetic_tentacle_interfaces::msg::MagneticField& msg) {
+void FieldNode::computeField_callback(
+    const std::shared_ptr<
+        magnetic_tentacle_interfaces::srv::ComputeMagneticField::Request> req,
+    std::shared_ptr<
+        magnetic_tentacle_interfaces::srv::ComputeMagneticField::Response>
+    res) {
+    int num_points = req->points.size();
+        for(int i = 0; i < num_points; i++){
+            res->fields[i].point.position = req->points[i];
+            res->fields[i].vector.x = bx_;
+            res->fields[i].vector.y = by_;
+            res->fields[i].vector.z = bz_;
+            res->fields[i].gradient = std::array<double, 9>{};
+        }
+    }
+
+void FieldNode::callbackField(
+    const magnetic_tentacle_interfaces::msg::MagneticField& msg) {
     bool x_change = abs(msg.vector.x - bx_) > maxChange_;
     bool y_change = abs(msg.vector.y - by_) > maxChange_;
     bool z_change = abs(msg.vector.z - bz_) > maxChange_;

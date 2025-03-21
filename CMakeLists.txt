@@ -73,7 +73,7 @@ if(BUILD_TESTING)
   target_compile_definitions(${PROJECT_NAME}_psu_test PRIVATE TESTING_EXCLUDE_MAIN=true)
   target_compile_definitions(${PROJECT_NAME}_field_test PRIVATE TESTING_EXCLUDE_MAIN=true)
 
-  else()
+else()
   message("HCOIL_PKG: Not building tests")
   add_executable(psu_node src/psu_node.cpp)
   add_executable(field_node src/field_node.cpp)
