@@ -27,7 +27,7 @@ class FieldNode : public rclcpp::Node, public MagneticEmitterBase {
      * @brief Subscriber for magnetic field messages.
      */
     rclcpp::Subscription<
-        magnetic_tentacle_interfaces::msg::MagneticField>::SharedPtr field_sub_;
+        hcoil_interfaces::msg::MagField>::SharedPtr field_sub_;
 
     /**
      * @brief Publishers for voltage and current messages.
@@ -50,7 +50,7 @@ class FieldNode : public rclcpp::Node, public MagneticEmitterBase {
      * @param msg The received magnetic field message.
      */
     void callbackField(
-        const magnetic_tentacle_interfaces::msg::MagneticField &msg);
+        const hcoil_interfaces::msg::MagField &msg);
 
     void computeField_callback(
         const std::shared_ptr<

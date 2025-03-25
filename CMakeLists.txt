@@ -7,7 +7,9 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(ament_cmake_python REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rclpy REQUIRED)
 find_package(hcoil_interfaces REQUIRED)
 find_package(magnetic_tentacle_interfaces REQUIRED)
 find_package(std_srvs REQUIRED)
@@ -28,7 +30,7 @@ set(PSULibs ${PSU} ${SERIAL})
 set(LinActLibs ${LINACT} ${SERIAL})
 set(TmeterLibs ${TMETER} ${SERIAL})
 
-option(BUILD_TESTING "Enable testing" OFF)
+option(BUILD_TESTING "Enable testing" FALSE)
 
 if(BUILD_TESTING)
   message("HCOIL_PKG: Building tests")
@@ -91,6 +93,13 @@ else()
     DESTINATION lib/${PROJECT_NAME}
   )
 endif()
+
+ament_python_install_package(${PROJECT_NAME})
+
+install(PROGRAMS
+  scripts/publish_field.py
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 # Install launch files.
 install(DIRECTORY
