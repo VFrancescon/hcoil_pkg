@@ -85,7 +85,6 @@ else()
   target_link_libraries(field_node ${PSULibs})
   install(TARGETS
     psu_node
-
     DESTINATION lib/${PROJECT_NAME}
   )
   install(TARGETS
@@ -98,6 +97,7 @@ ament_python_install_package(${PROJECT_NAME})
 
 install(PROGRAMS
   scripts/publish_field.py
+  scripts/request_field.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

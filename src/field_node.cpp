@@ -48,8 +48,7 @@ FieldNode::FieldNode(const std::string& nodeName, rclcpp::NodeOptions& options)
     allAddress_.insert(allAddress_.end(), yAddress_.begin(), yAddress_.end());
     allAddress_.insert(allAddress_.end(), zAddress_.begin(), zAddress_.end());
 
-    field_sub_ = this->create_subscription<
-        hcoil_interfaces::msg::MagField>(
+    field_sub_ = this->create_subscription<hcoil_interfaces::msg::MagField>(
         "magfield", 10, std::bind(&FieldNode::callbackField, this, _1));
     adv_num_ = allAddress_.size();
     vi_pubs_.resize(adv_num_);
@@ -66,22 +65,27 @@ FieldNode::FieldNode(const std::string& nodeName, rclcpp::NodeOptions& options)
 
 void FieldNode::computeField_callback(
     const std::shared_ptr<
-        magnetic_tentacle_interfaces::srv::ComputeMagneticField::Request> req,
+        magnetic_tentacle_interfaces::srv::ComputeMagneticField::Request>
+        req,
     std::shared_ptr<
         magnetic_tentacle_interfaces::srv::ComputeMagneticField::Response>
-    res) {
+        res) {
+    // RCLCPP_INFO(this->get_logger(), "Service exists");
     int num_points = req->points.size();
-        for(int i = 0; i < num_points; i++){
-            res->fields[i].point.position = req->points[i];
-            res->fields[i].vector.x = bx_;
-            res->fields[i].vector.y = by_;
-            res->fields[i].vector.z = bz_;
-            res->fields[i].gradient = std::array<double, 9>{};
-        }
+    // RCLCPP_INFO(this->get_logger(), "Fulfilling request for %d points",
+    // num_points);
+    res->fields.resize(
+        num_points);  // Ensure fields is resized to match num_points
+    for (int i = 0; i < num_points; i++) {
+        res->fields[i].point.position = req->points[i];
+        res->fields[i].vector.x = bx_;
+        res->fields[i].vector.y = by_;
+        res->fields[i].vector.z = bz_;
+        res->fields[i].gradient = std::array<double, 9>{};
     }
+}
 
-void FieldNode::callbackField(
-    const hcoil_interfaces::msg::MagField& msg) {
+void FieldNode::callbackField(const hcoil_interfaces::msg::MagField& msg) {
     bool x_change = abs(msg.bx - bx_) > maxChange_;
     bool y_change = abs(msg.by - by_) > maxChange_;
     bool z_change = abs(msg.bz - bz_) > maxChange_;
@@ -128,6 +132,8 @@ void FieldNode::callbackField(
     bx_ = msg.bx;
     by_ = msg.by;
     bz_ = msg.bz;
+    RCLCPP_INFO(this->get_logger(), "Recived field bx= %f, by= %f, bz= %f", bx_,
+                by_, bz_);
     ix_ = bx_ / cal_x_;
     iy_ = by_ / cal_y_;
     iz_ = bz_ / cal_z_;
