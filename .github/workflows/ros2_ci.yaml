@@ -73,15 +73,8 @@ jobs:
           source /opt/ros/humble/setup.bash
           cd ros2_ws
           rosdep install --from-paths src --ignore-src -r -y
-          colcon build --packages-select magnetic_tentacle_interfaces
-          source install/setup.bash
           colcon build --cmake-args -DBUILD_TESTING=TRUE
           colcon test --return-code-on-test-failure --event-handlers console_cohesion+
-
-      - name: Debug Workspace
-        run: |
-          ls -R ros2_ws/install
-          ls -R ros2_ws/build
 
       # Upload test results as artifacts
       - name: Upload Test Results
