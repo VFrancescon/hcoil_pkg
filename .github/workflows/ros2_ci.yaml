@@ -59,6 +59,13 @@ jobs:
           sudo make -j16 install
           cd ~
         
+      - name: Checkout magnetic_tentacle_interfaces
+        uses: actions/checkout@v4
+        with:
+          repository: Stormlabuk/magnetic_tentacle_interfaces
+          path: ros2_ws/src/magnetic_tentacle_interfaces
+          token: ${{ secrets.INTERFACES_TOKEN }}
+
       # Build both packages and run tests
       - name: Build and Test
         shell: bash
