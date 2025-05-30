@@ -35,6 +35,7 @@ class PSU_Node : public rclcpp::Node {
 
    public:
     PSU_Node(const std::string &nodeName, const bool &debugMode);
+    PSU_Node(const std::string &nodeName);
     std::string psu_addr_;
     double currentI_ = 0.f,
            currentV_ = 0.f;  // internal values for cached I and V.

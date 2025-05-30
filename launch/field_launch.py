@@ -11,15 +11,17 @@ def generate_launch_description():
         # Include the psu_array_launch.py file
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
-                PathJoinSubstitution([
-                    FindPackageShare("hcoil_pkg"),
-                    "launch",
-                    "psu_array_launch.py"
-                ])
-            )
+            PathJoinSubstitution([
+                FindPackageShare("hcoil_pkg"),
+                "launch",
+                "psu_array_launch.py"
+            ])
+            ),
+            launch_arguments={
+            "debugMode": "True"
+            }.items()
         ),
 
-        # You can also add other nodes or actions here
         Node(
             package="hcoil_pkg",
             executable="field_node",

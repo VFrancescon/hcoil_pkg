@@ -10,7 +10,8 @@ def generate_launch_description():
             name="test_diff",
             parameters=[
                 {"vConv": 0.25},
-                {"iConv": 0.1}
+                {"iConv": 0.1},
+                {"debugMode": False}
             ]
         )
     ])

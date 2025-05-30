@@ -1,8 +1,12 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
+
 
 
 def generate_launch_description():
+    debug_mode = LaunchConfiguration('debugMode')
     return LaunchDescription([
         Node(
             package="hcoil_pkg",
@@ -13,7 +17,7 @@ def generate_launch_description():
                 {"iConv": 0.01},
                 {"RatedV": 60},
                 {"RatedI": 50},
-                {"debugMode": True},  # Corrected boolean parameter
+                {"debugMode": debug_mode},  # Corrected boolean parameter
                 {"COM_PORT": "/dev/ttyUSB0"}
             ]
         ),
@@ -26,7 +30,7 @@ def generate_launch_description():
                 {"iConv": 0.01},
                 {"RatedV": 60},
                 {"RatedI": 50},
-                {"debugMode": True},  # Corrected boolean parameter
+                {"debugMode": debug_mode},  # Corrected boolean parameter
                 {"COM_PORT": "/dev/ttyUSB1"}
             ]
         ),
@@ -39,7 +43,7 @@ def generate_launch_description():
                 {"iConv": 0.01},
                 {"RatedV": 60},
                 {"RatedI": 50},
-                {"debugMode": True},  # Corrected boolean parameter
+                {"debugMode": debug_mode},  # Corrected boolean parameter
                 {"COM_PORT": "/dev/ttyUSB2"}
             ]
         ),
@@ -52,7 +56,7 @@ def generate_launch_description():
                 {"iConv": 0.01},
                 {"RatedV": 60},
                 {"RatedI": 50},
-                {"debugMode": True},  # Corrected boolean parameter
+                {"debugMode": debug_mode},  # Corrected boolean parameter
                 {"COM_PORT": "/dev/ttyUSB3"}
             ]
         ),
@@ -65,7 +69,7 @@ def generate_launch_description():
                 {"iConv": 0.01},
                 {"RatedV": 50},
                 {"RatedI": 30},
-                {"debugMode": True},  # Corrected boolean parameter
+                {"debugMode": debug_mode},  # Corrected boolean parameter
                 {"COM_PORT": "/dev/ttyUSB4"}
             ]
         ),
@@ -78,7 +82,7 @@ def generate_launch_description():
                 {"iConv": 0.01},
                 {"RatedV": 50},
                 {"RatedI": 30},
-                {"debugMode": True},  # Corrected boolean parameter
+                {"debugMode": debug_mode},  # Corrected boolean parameter
                 {"COM_PORT": "/dev/ttyUSB5"}
             ]
         )
