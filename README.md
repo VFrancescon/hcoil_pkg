@@ -7,7 +7,7 @@ ROS2 bindings for the [Helmholtz coil setup and PSU array](git@github.com:VFranc
 ## Usage 
 
 The [field](launch/field_launch.py) spins up a field node that subscribes to the "magfield" topic. 
-The same node then publishes VI messages to all the PSUs connected, which are configured in the same launch file. The currently applied field can be fetched using the "ComputeField" service.
+The same node then publishes VI messages to all the PSUs connected, which are configured in the same launch file. The currently applied field can be fetched using the "compute_magnetic_field" service.
 
 ### Publish field
 

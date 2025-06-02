@@ -4,9 +4,10 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.actions import IncludeLaunchDescription
 from launch.substitutions import PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
-
+from launch.substitutions import LaunchConfiguration
 
 def generate_launch_description():
+    debug_mode = LaunchConfiguration('debugMode', default="True")
     return LaunchDescription([
         # Include the psu_array_launch.py file
         IncludeLaunchDescription(
@@ -18,7 +19,7 @@ def generate_launch_description():
             ])
             ),
             launch_arguments={
-            "debugMode": "True"
+            "debugMode": debug_mode
             }.items()
         ),
 
