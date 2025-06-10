@@ -4,6 +4,23 @@
 
 ROS2 bindings for the [Helmholtz coil setup and PSU array](git@github.com:VFrancescon/coil_libs.git).  
 
+## Dependencies
+
+There are two other repos needed: 
+
+[https://github.com/gbmhunter/CppLinuxSerial/](CppLinuxSerial)
+[https://github.com/vfrancescon/coil_libs](coils)
+
+You can install them yourself, but for your convenience, there is a bash file included here.
+
+```bash
+# pwd: .../hcoil_pkg
+sudo chmod x dependencies.sh
+sh dependencies.sh
+```
+
+This should setup all your dependencies on its own.
+
 ## Usage 
 
 The [field](launch/field_launch.py) spins up a field node that subscribes to the "magfield" topic. 
