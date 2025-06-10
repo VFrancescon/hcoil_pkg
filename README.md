@@ -8,8 +8,9 @@ ROS2 bindings for the [Helmholtz coil setup and PSU array](git@github.com:VFranc
 
 There are two other repos needed: 
 
-[https://github.com/gbmhunter/CppLinuxSerial/](CppLinuxSerial)
-[https://github.com/vfrancescon/coil_libs](coils)
+[CppLinuxSerial](https://github.com/gbmhunter/CppLinuxSerial/)
+
+[coils libraries](https://github.com/vfrancescon/coil_libs)
 
 You can install them yourself, but for your convenience, there is a bash file included here.
 
