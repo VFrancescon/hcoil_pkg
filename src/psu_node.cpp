@@ -107,8 +107,8 @@ PSU_Node::PSU_Node(const std::string& nodeName, const bool& debugMode)
 }
 
 void PSU_Node::callbackVIWrite(const hcoil_interfaces::msg::VoltAmp& msg) {
-    RCLCPP_INFO(this->get_logger(), "I received a message V: %f, I: %f",
-                msg.voltage, msg.current);
+    // RCLCPP_INFO(this->get_logger(), "I received a message V: %f, I: %f",
+    //             msg.voltage, msg.current);
 
     try {
         if (msg.voltage > vLimit)
@@ -196,7 +196,7 @@ void PSU_Node::callbackVIWrite(const hcoil_interfaces::msg::VoltAmp& msg) {
                 break;
         }
     } else {
-        RCLCPP_INFO(this->get_logger(), "Debug mode on. No need to act");
+        // RCLCPP_INFO(this->get_logger(), "Debug mode on. No need to act");
     }
 
     currentV_ = msg.voltage;

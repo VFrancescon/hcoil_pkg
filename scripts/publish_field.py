@@ -38,15 +38,15 @@ class MinimalPublisher(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    print("Usage:")
-    print("  [--ros-args -p bx/by/bz]:=float")
-    print()
-    print("Options:")
-    print("  Set bx, by, bz, or any combination thereof.")
-    print()
-    print("Description:")
-    print("  This script publishes a magnetic field vector (bx, by, bz) to the 'magfield' topic.")
-    print("  Ensure that the given argument is a float (e.g., 10.0 instead of 10).")
+    # print("Usage:")
+    # print("  [--ros-args -p bx/by/bz]:=float")
+    # print()
+    # print("Options:")
+    # print("  Set bx, by, bz, or any combination thereof.")
+    # print()
+    # print("Description:")
+    # print("  This script publishes a magnetic field vector (bx, by, bz) to the 'magfield' topic.")
+    # print("  Ensure that the given argument is a float (e.g., 10.0 instead of 10).")
     minimal_publisher = MinimalPublisher()
 
     # Publish the field once
