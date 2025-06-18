@@ -13,7 +13,7 @@ class MinimalClient(Node):
     def __init__(self):
         super().__init__('field_request_client')
 
-        self.client = self.create_client(ComputeMagneticField, 'ComputeField')
+        self.client = self.create_client(ComputeMagneticField, '/compute_magnetic_field')
 
         while not self.client.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('Waiting for service ComputeField to become available...')
