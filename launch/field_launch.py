@@ -7,7 +7,7 @@ from launch_ros.substitutions import FindPackageShare
 from launch.substitutions import LaunchConfiguration
 
 def generate_launch_description():
-    debug_mode = LaunchConfiguration('debugMode', default="True")
+    debug_mode = LaunchConfiguration('debugMode', default="False")
     return LaunchDescription([
         # Include the psu_array_launch.py file
         IncludeLaunchDescription(
@@ -30,7 +30,7 @@ def generate_launch_description():
             parameters=[
                 {"xNum": 2},
                 {"yNum": 1},
-                {"zNum": 1},
+                {"zNum": 2},
                 {"xRoot": "PSU0"},
                 {"yRoot": "PSU4"},
                 {"zRoot": "PSU2"},

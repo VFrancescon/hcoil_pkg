@@ -53,6 +53,7 @@ PSU_Node::PSU_Node(const std::string& nodeName)
         RCLCPP_INFO(this->get_logger(), "We are in debug mode.");
     } else {
         PSU = std::make_unique<DXKDP_PSU>(COM_PORT_, vConv_, iConv_);
+        PSU->PoCtrl(0x01);
     }
 }
 

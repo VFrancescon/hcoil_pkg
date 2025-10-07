@@ -73,17 +73,17 @@ def generate_launch_description():
                 {"COM_PORT": "/dev/ttyUSB4"}
             ]
         ),
-        Node(
-            package="hcoil_pkg",
-            executable="psu_node",
-            name="PSU5",
-            parameters=[
-                {"vConv": 0.01},
-                {"iConv": 0.01},
-                {"RatedV": 50},
-                {"RatedI": 30},
-                {"debugMode": debug_mode},  # Corrected boolean parameter
-                {"COM_PORT": "/dev/ttyUSB5"}
-            ]
-        )
+        # Node(
+        #     package="hcoil_pkg",
+        #     executable="psu_node",
+        #     name="PSU5",
+        #     parameters=[
+        #         {"vConv": 0.01},
+        #         {"iConv": 0.01},
+        #         {"RatedV": 50},
+        #         {"RatedI": 30},
+        #         {"debugMode": debug_mode},  # Corrected boolean parameter
+        #         {"COM_PORT": "/dev/ttyUSB5"}
+        #     ]
+        # )
     ])
