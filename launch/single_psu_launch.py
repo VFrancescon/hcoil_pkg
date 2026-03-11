@@ -13,12 +13,12 @@ def generate_launch_description():
             executable="psu_node",
             name="PSU2",
             parameters=[
-                {"vConv": 0.01},
+                {"vConv": 0.1},
                 {"iConv": 0.01},
                 {"RatedV": 60},
                 {"RatedI": 50},
                 {"debugMode": False},  # Corrected boolean parameter
-                {"COM_PORT": "/dev/ttyUSB2"}
+                {"COM_PORT": "/dev/ttyUSB4"}
             ]
         )
     ])

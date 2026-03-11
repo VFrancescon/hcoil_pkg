@@ -18,7 +18,7 @@ def generate_launch_description():
                 {"RatedV": 60},
                 {"RatedI": 50},
                 {"debugMode": debug_mode},  # Corrected boolean parameter
-                {"COM_PORT": "/dev/ttyUSB0"}
+                {"COM_PORT": "/dev/ttyUSB5"}
             ]
         ),
         Node(
@@ -31,7 +31,7 @@ def generate_launch_description():
                 {"RatedV": 60},
                 {"RatedI": 50},
                 {"debugMode": debug_mode},  # Corrected boolean parameter
-                {"COM_PORT": "/dev/ttyUSB1"}
+                {"COM_PORT": "/dev/ttyUSB4"}
             ]
         ),
         Node(
@@ -44,7 +44,7 @@ def generate_launch_description():
                 {"RatedV": 60},
                 {"RatedI": 50},
                 {"debugMode": debug_mode},  # Corrected boolean parameter
-                {"COM_PORT": "/dev/ttyUSB2"}
+                {"COM_PORT": "/dev/ttyUSB3"}
             ]
         ),
         Node(
@@ -57,7 +57,7 @@ def generate_launch_description():
                 {"RatedV": 60},
                 {"RatedI": 50},
                 {"debugMode": debug_mode},  # Corrected boolean parameter
-                {"COM_PORT": "/dev/ttyUSB3"}
+                {"COM_PORT": "/dev/ttyUSB2"}
             ]
         ),
         Node(
@@ -70,7 +70,7 @@ def generate_launch_description():
                 {"RatedV": 50},
                 {"RatedI": 30},
                 {"debugMode": debug_mode},  # Corrected boolean parameter
-                {"COM_PORT": "/dev/ttyUSB4"}
+                {"COM_PORT": "/dev/ttyUSB1"}
             ]
         ),
         # Node(
