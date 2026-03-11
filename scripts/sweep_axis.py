@@ -31,7 +31,7 @@ class MinimalPublisher(Node):
         # self.abs_z_ = self.get_parameter("abs_z").get_parameter_value().double_value
         loop_rate = 0.5
         self._loop_rate = self.create_rate(loop_rate, self.get_clock())
-        self.get_logger().info("Starting node: abs: %f, y: %s" % (-self.abs_field, self.axis))
+        self.get_logger().info("Starting node: abs: %f, axis: %s" % (-self.abs_field, self.axis))
 
         if(self.abs_field > 10):
             mag = MagField()
@@ -45,23 +45,25 @@ class MinimalPublisher(Node):
         self.num_steps = 10
         # self.field_array = np.arange(-self.abs_field, self.abs_field, self.num_steps)
         self.field_array = np.linspace(-self.abs_field, self.abs_field, self.num_steps)
+        print(self.field_array)
         # self.rate.sleep()
         # self._loop_rate.sleep()
-        time.sleep(2)
+        time.sleep(5)
+
     def sweep_fields(self):
         for i in range(self.num_steps):
             
             mag = MagField()
             mag.bx = self.field_array[i] if self.axis == "x_" else 0.0
             mag.by = self.field_array[i] if self.axis == "y_" else 0.0
-            mag.bz = self.field_array[i] if self.axis == "z_" else 0.0
+            mag.bz = self.field_array[i] if self.axis == "z_" else -10.0
+            print(self.field_array[i])
             mag.header.stamp = self.get_clock().now().to_msg()
             mag.header.frame_id = "sweep_field"
             self.get_logger().info("Publishing field: x: %f, y: %f, z: %f" % (mag.bx, mag.by, mag.bz))
             self.publisher_.publish(mag)
             # self._loop_rate.sleep()
-            time.sleep(2)
-
+            time.sleep(5)
 
     # def publish_field(self):
     #     mag = MagField()
