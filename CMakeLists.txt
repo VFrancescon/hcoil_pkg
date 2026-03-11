@@ -98,6 +98,7 @@ ament_python_install_package(${PROJECT_NAME})
 install(PROGRAMS
   scripts/publish_field.py
   scripts/request_field.py
+  scripts/sweep_axis.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
