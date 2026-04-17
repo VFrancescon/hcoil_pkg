@@ -4,8 +4,8 @@
 
 #include "hcoil_interfaces/msg/mag_field.hpp"
 #include "hcoil_interfaces/msg/volt_amp.hpp"
-#include "MagneticEmitterBase.hpp"
-#include "magnetic_tentacle_interfaces/msg/magnetic_field.hpp"
+// #include "MagneticEmitterBase.hpp"
+// #include "magnetic_tentacle_interfaces/msg/magnetic_field.hpp"
 #include "rcl_interfaces/msg/parameter_type.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
@@ -21,7 +21,7 @@ using namespace std::placeholders;
  * messages, publishing voltage and current messages, and managing calibration
  * and control parameters for a magnetic field system.
  */
-class FieldNode : public rclcpp::Node, public MagneticEmitterBase {
+class FieldNode : public rclcpp::Node {
    private:
     /**
      * @brief Subscriber for magnetic field messages.
@@ -52,12 +52,6 @@ class FieldNode : public rclcpp::Node, public MagneticEmitterBase {
     void callbackField(
         const hcoil_interfaces::msg::MagField &msg);
 
-    void computeField_callback(
-        const std::shared_ptr<
-            magnetic_tentacle_interfaces::srv::ComputeMagneticField::Request> req,
-        std::shared_ptr<
-            magnetic_tentacle_interfaces::srv::ComputeMagneticField::Response>
-            res);
 
     /**
      * @brief Root addresses for x, y, and z axes.

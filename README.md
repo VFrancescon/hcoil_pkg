@@ -1,12 +1,12 @@
-![CI/CD Status](https://github.com/VFrancescon/hcoil_pkg/actions/workflows/ros2_ci.yaml/badge.svg)
-
 # hcoil_pkg
+
+![CI/CD Status](https://github.com/VFrancescon/hcoil_pkg/actions/workflows/ros2_ci.yaml/badge.svg)
 
 ROS2 bindings for the [Helmholtz coil setup and PSU array](git@github.com:VFrancescon/coil_libs.git).  
 
 ## Dependencies
 
-There are two other repos needed: 
+There are two other repos needed:
 
 [CppLinuxSerial](https://github.com/gbmhunter/CppLinuxSerial/)
 
@@ -22,9 +22,19 @@ sh dependencies.sh
 
 This should setup all your dependencies on its own.
 
-## Usage 
+## Usage
 
-The [field](launch/field_launch.py) spins up a field node that subscribes to the "magfield" topic. 
+### Important
+
+Since upgrading to Ubuntu 22, I have noticed that the OS likes to undo write permission to the PSU's serial port whenever the machine turns off. If you have just turned the machine on and the PSU nodes complain about permissions, use:
+
+```bash
+sudo chmod +x /dev/ttyUSB*
+```
+
+### Launch Files
+
+The [field](launch/field_launch.py) spins up a field node that subscribes to the "magfield" topic.
 The same node then publishes VI messages to all the PSUs connected, which are configured in the same launch file. The currently applied field can be fetched using the "compute_magnetic_field" service.
 
 ### Publish field

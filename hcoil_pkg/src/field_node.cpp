@@ -1,8 +1,7 @@
 #include "hcoil_pkg/field_node.hpp"
 
 FieldNode::FieldNode(const std::string& nodeName, rclcpp::NodeOptions& options)
-    : rclcpp::Node(nodeName, options),
-      MagneticEmitterBase(MagneticEmitterBase::SourceType::Coils) {
+    : rclcpp::Node(nodeName, options){
     // PSU number parameter declaration
     auto num_param_desc = rcl_interfaces::msg::ParameterDescriptor{};
     num_param_desc.description = "Number of supplies in given axis";
@@ -57,33 +56,8 @@ FieldNode::FieldNode(const std::string& nodeName, rclcpp::NodeOptions& options)
         vi_pubs_[i] = this->create_publisher<hcoil_interfaces::msg::VoltAmp>(
             allAddress_[i], 10);
     }
-    computeField_srv_ = this->create_service<
-        magnetic_tentacle_interfaces::srv::ComputeMagneticField>(
-        compute_service_addr,
-        std::bind(&FieldNode::computeField_callback, this, _1, _2));
 }
 
-void FieldNode::computeField_callback(
-    const std::shared_ptr<
-        magnetic_tentacle_interfaces::srv::ComputeMagneticField::Request>
-        req,
-    std::shared_ptr<
-        magnetic_tentacle_interfaces::srv::ComputeMagneticField::Response>
-        res) {
-    // RCLCPP_INFO(this->get_logger(), "Service exists");
-    int num_points = req->points.size();
-    // RCLCPP_INFO(this->get_logger(), "Fulfilling request for %d points",
-    // num_points);
-    res->fields.resize(
-        num_points);  // Ensure fields is resized to match num_points
-    for (int i = 0; i < num_points; i++) {
-        res->fields[i].point.position = req->points[i];
-        res->fields[i].vector.x = bx_;
-        res->fields[i].vector.y = by_;
-        res->fields[i].vector.z = bz_;
-        res->fields[i].gradient = std::array<double, 9>{};
-    }
-}
 
 void FieldNode::callbackField(const hcoil_interfaces::msg::MagField& msg) {
     bool x_change = abs(msg.bx - bx_) > maxChange_;

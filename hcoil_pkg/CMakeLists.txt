@@ -11,7 +11,7 @@ find_package(ament_cmake_python REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
 find_package(hcoil_interfaces REQUIRED)
-find_package(magnetic_tentacle_interfaces REQUIRED)
+# find_package(magnetic_tentacle_interfaces REQUIRED)
 find_package(std_srvs REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
@@ -66,7 +66,7 @@ if(BUILD_TESTING)
   ament_target_dependencies(${PROJECT_NAME}_field_test
     rclcpp
     hcoil_interfaces
-    magnetic_tentacle_interfaces
+    # magnetic_tentacle_interfaces
     std_srvs
   )
 
@@ -97,7 +97,7 @@ ament_python_install_package(${PROJECT_NAME})
 
 install(PROGRAMS
   scripts/publish_field.py
-  scripts/request_field.py
+  # scripts/request_field.py
   scripts/sweep_axis.py
   DESTINATION lib/${PROJECT_NAME}
 )
