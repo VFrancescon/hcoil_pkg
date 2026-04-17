@@ -50,7 +50,7 @@ The same node then publishes VI messages to all the PSUs connected, which are co
 * V/I limits are set at 70% of each supply's rated values. Those can be set as ROS Params.
 See [6PSU + Field](launch/field_launch.py) example for usage.
 
-* The middleware node is spun, with a [Magnetic Field Interface](https://github.com/VFrancescon/hcoil_interfaces/blob/main/msg/MagField.msg), which is automatically translated to input msgs for each PSU node.
+* The middleware node is spun, which is automatically translated to input msgs for each PSU node.
 
 * The [Field Node](src/field_node.cpp), takes ROS Params x/y/z/Num and x/y/z/Root.
   * x/y/z/Num is an integer (1 or 2) that specifies how many supplies handle the given axis.
