@@ -80,7 +80,7 @@ else()
   add_executable(psu_node src/psu_node.cpp)
   add_executable(field_node src/field_node.cpp)
   ament_target_dependencies(psu_node rclcpp hcoil_interfaces std_srvs)
-  ament_target_dependencies(field_node rclcpp hcoil_interfaces magnetic_tentacle_interfaces std_srvs)
+  ament_target_dependencies(field_node rclcpp hcoil_interfaces std_srvs)
   target_link_libraries(psu_node ${PSULibs})
   target_link_libraries(field_node ${PSULibs})
   install(TARGETS
