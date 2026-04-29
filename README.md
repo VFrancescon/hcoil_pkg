@@ -41,6 +41,14 @@ The same node then publishes VI messages to all the PSUs connected, which are co
 
 [Publish field](scripts/publish_field.py) spins up and publishes a single field message. The field to publish can be set with ROS params. See the node for more info.
 
+Example usage:
+
+```bash
+ros2 run hcoil_pkg publish_field --ros-args -p bx:=0.0 -p by:=0.0 -p bz:=0.0
+```
+
+Note: the field numbers MUST be decimals, integers will throw a fit.
+
 ## General Notes
 
 * PSU nodes have a [Voltage/Current interface](https://github.com/VFrancescon/hcoil_interfaces/blob/main/msg/VoltAmp.msg), with embedded calls to polarity setting.
