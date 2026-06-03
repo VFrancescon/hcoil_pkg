@@ -25,7 +25,8 @@ PSU_Node::PSU_Node(const std::string& nodeName)
     this->declare_parameter("RatedI", 30, rated_param_desc);
     RatedV_ = this->get_parameter("RatedV").as_int();
     RatedI_ = this->get_parameter("RatedI").as_int();
-
+    vLimit = RatedV_ * 0.8;
+    iLimit = RatedI_ * 0.8;
     auto com_port_param_desc = rcl_interfaces::msg::ParameterDescriptor{};
     com_port_param_desc.description = "Serial port for the PSU communication.";
     com_port_param_desc.type = rcl_interfaces::msg::ParameterType::PARAMETER_STRING;

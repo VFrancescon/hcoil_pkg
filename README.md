@@ -43,7 +43,7 @@ The same node then publishes VI messages to all the PSUs connected, which are co
 
 ## General Notes
 
-* PSU nodes have a [Voltage/Current interface](https://github.com/VFrancescon/hcoil_interfaces/blob/main/msg/VoltAmp.msg), with embedded calls to polarity setting.
+* PSU nodes have a [Voltage/Current interface](https://github.com/VFrancescon/hcoil_pkg/blob/main/hcoil_interfaces/msg/VoltAmp.msg), with embedded calls to polarity setting.
 
 * Each PSU node has a ROS Param "debug", to be used to omit all Serial calls to PSU.
 
