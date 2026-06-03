@@ -15,7 +15,7 @@ There are two other repos needed:
 You can install them yourself, but for your convenience, there is a bash file included here.
 
 ```bash
-# pwd: .../hcoil_pkg
+# pwd: .../hcoil_pkg/hcoil_pkg
 sudo chmod x dependencies.sh
 sh dependencies.sh
 ```
@@ -29,7 +29,7 @@ This should setup all your dependencies on its own.
 Since upgrading to Ubuntu 22, I have noticed that the OS likes to undo write permission to the PSU's serial port whenever the machine turns off. If you have just turned the machine on and the PSU nodes complain about permissions, use:
 
 ```bash
-sudo chmod +x /dev/ttyUSB*
+sudo chmod a+rwx /dev/ttyUSB*
 ```
 
 ### Launch Files
@@ -40,6 +40,14 @@ The same node then publishes VI messages to all the PSUs connected, which are co
 ### Publish field
 
 [Publish field](scripts/publish_field.py) spins up and publishes a single field message. The field to publish can be set with ROS params. See the node for more info.
+
+Example usage:
+
+```bash
+ros2 run hcoil_pkg publish_field --ros-args -p bx:=0.0 -p by:=0.0 -p bz:=0.0
+```
+
+Note: the field numbers MUST be decimals, integers will throw a fit.
 
 ## General Notes
 
