@@ -1,7 +1,5 @@
 #include "hcoil_pkg/field_node.hpp"
 
-#include <cmath>
-
 FieldNode::FieldNode(const std::string& nodeName, rclcpp::NodeOptions& options)
     : rclcpp::Node(nodeName, options){
     // PSU number parameter declaration
@@ -62,55 +60,52 @@ FieldNode::FieldNode(const std::string& nodeName, rclcpp::NodeOptions& options)
 
 
 void FieldNode::callbackField(const hcoil_interfaces::msg::MagField& msg) {
-    float bx = msg.bx, by = msg.by, bz = msg.bz;
-
-    if (abs(bx - bx_) > this->maxChange_) {
-        float requested = bx;
-        float clamped = bx_ + std::copysign(static_cast<float>(this->maxChange_), bx - bx_);
-        RCLCPP_ERROR(this->get_logger(),
-                     "Change in x field (%.3f -> %.3f) exceeds boundary of %dmT, clamping to %.3f",
-                     bx_, requested, this->maxChange_, clamped);
-        bx = clamped;
-    }
-    if (abs(by - by_) > this->maxChange_) {
-        float requested = by;
-        float clamped = by_ + std::copysign(static_cast<float>(this->maxChange_), by - by_);
-        RCLCPP_ERROR(this->get_logger(),
-                     "Change in y field (%.3f -> %.3f) exceeds boundary of %dmT, clamping to %.3f",
-                     by_, requested, this->maxChange_, clamped);
-        by = clamped;
-    }
-    if (abs(bz - bz_) > this->maxChange_) {
-        float requested = bz;
-        float clamped = bz_ + std::copysign(static_cast<float>(this->maxChange_), bz - bz_);
-        RCLCPP_ERROR(this->get_logger(),
-                     "Change in z field (%.3f -> %.3f) exceeds boundary of %dmT, clamping to %.3f",
-                     bz_, requested, this->maxChange_, clamped);
-        bz = clamped;
-    }
-
-    if (abs(bx) > this->maxField_) {
-        RCLCPP_ERROR(this->get_logger(),
-                     "Field in x axis exceeds boundary of %dmT, clamping to limit",
-                     this->maxField_);
-        bx = std::copysign(static_cast<float>(this->maxField_), bx);
-    }
-    if (abs(by) > this->maxField_) {
-        RCLCPP_ERROR(this->get_logger(),
-                     "Field in y axis exceeds boundary of %dmT, clamping to limit",
-                     this->maxField_);
-        by = std::copysign(static_cast<float>(this->maxField_), by);
-    }
-    if (abs(bz) > this->maxField_) {
-        RCLCPP_ERROR(this->get_logger(),
-                     "Field in z axis exceeds boundary of %dmT, clamping to limit",
-                     this->maxField_);
-        bz = std::copysign(static_cast<float>(this->maxField_), bz);
+    bool x_change = abs(msg.bx - bx_) > maxChange_;
+    bool y_change = abs(msg.by - by_) > maxChange_;
+    bool z_change = abs(msg.bz - bz_) > maxChange_;
+    try {
+        if (x_change) {
+            throw field_exceptions::ChangeException(
+                "Change in x field exceeds boundary of 15mT, exiting. Please "
+                "restart the "
+                "node");
+        }
+        if (y_change) {
+            throw field_exceptions::ChangeException(
+                "Change in y field  exceeds boundary of 15mT, exiting. Please "
+                "restart the node");
+        }
+        if (z_change) {
+            throw field_exceptions::ChangeException(
+                "Change in z field  exceeds boundary of 15mT, exiting. Please "
+                "restart the node");
+        }
+        if (abs(msg.bx) > this->maxField_) {
+            throw field_exceptions::maxFieldException(
+                "Field in x axis  exceeds boundary of 22mT, exiting. Please "
+                "restart the node");
+        }
+        if (abs(msg.by) > this->maxField_) {
+            throw field_exceptions::maxFieldException(
+                "Field in y axis  exceeds boundary of 22mT, exiting. Please "
+                "restart the node");
+        }
+        if (abs(msg.bz) > this->maxField_) {
+            throw field_exceptions::maxFieldException(
+                "Field in z axis exceeds boundary of 22mT, exiting. Please "
+                "restart the node");
+        }
+    } catch (field_exceptions::ChangeException& e) {
+        RCLCPP_ERROR(this->get_logger(), "ChangeException: %s", e.what());
+        rclcpp::shutdown();
+    } catch (field_exceptions::maxFieldException& e) {
+        RCLCPP_ERROR(this->get_logger(), "ChangeException: %s", e.what());
+        rclcpp::shutdown();
     }
 
-    bx_ = bx;
-    by_ = by;
-    bz_ = bz;
+    bx_ = msg.bx;
+    by_ = msg.by;
+    bz_ = msg.bz;
     RCLCPP_INFO(this->get_logger(), "Recived field bx= %f, by= %f, bz= %f", bx_,
                 by_, bz_);
     ix_ = bx_ / cal_x_;

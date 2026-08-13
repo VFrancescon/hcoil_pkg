@@ -93,10 +93,10 @@ class FieldNode : public rclcpp::Node {
     /**
      * @brief Maximum allowed magnetic field in mT.
      */
-    int maxField_ = 20;
+    int maxField_ = 22;
 
     /**
-     * @brief Maximum allowed change in field per cycle in mT.
+     * @brief Maximum allowed change in current per cycle in A.
      */
     int maxChange_ = 15;
 
@@ -110,6 +110,18 @@ class FieldNode : public rclcpp::Node {
      */
     std::vector<hcoil_interfaces::msg::VoltAmp> vi_msgs_;
 };
+
+namespace field_exceptions {
+class ChangeException : public std::runtime_error {
+   public:
+    ChangeException(const std::string &message) : std::runtime_error(message) {}
+};
+class maxFieldException : public std::runtime_error {
+   public:
+    maxFieldException(const std::string &message)
+        : std::runtime_error(message) {}
+};
+}  // namespace field_exceptions
 
 #ifndef TESTING_EXCLUDE_MAIN
 int main(int argc, char *argv[]);
