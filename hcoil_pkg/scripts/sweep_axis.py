@@ -35,9 +35,9 @@ class MinimalPublisher(Node):
 
         if(self.abs_field > 10):
             mag = MagField()
-            mag.bx = -self.abs_field / 2 if self.axis == "x_" else 0.0
-            mag.by = -self.abs_field / 2 if self.axis == "y_" else 0.0
-            mag.bz = -self.abs_field / 2 if self.axis == "z_" else 0.0
+            mag.bx = self.abs_field / 2 if self.axis == "x" else 0.0
+            mag.by = self.abs_field / 2 if self.axis == "y" else 0.0
+            mag.bz = self.abs_field / 2 if self.axis == "z" else 0.0
             mag.header.stamp = self.get_clock().now().to_msg()
             mag.header.frame_id = "sweep_field"
             self.publisher_.publish(mag)
@@ -54,9 +54,9 @@ class MinimalPublisher(Node):
         for i in range(self.num_steps):
             
             mag = MagField()
-            mag.bx = self.field_array[i] if self.axis == "x_" else 0.0
-            mag.by = self.field_array[i] if self.axis == "y_" else 0.0
-            mag.bz = self.field_array[i] if self.axis == "z_" else -10.0
+            mag.bx = self.field_array[i] if self.axis == "x" else 0.0
+            mag.by = self.field_array[i] if self.axis == "y" else 0.0
+            mag.bz = self.field_array[i] if self.axis == "z" else 0.0
             print(self.field_array[i])
             mag.header.stamp = self.get_clock().now().to_msg()
             mag.header.frame_id = "sweep_field"
