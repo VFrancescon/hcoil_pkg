@@ -28,6 +28,9 @@ class MinimalPublisher(Node):
         self.bz_ = self.get_parameter("bz").get_parameter_value().double_value
 
     def publish_field(self):
+        while self.publisher_.get_subscription_count() == 0:
+            rclpy.spin_once(self, timeout_sec=0.1)
+
         mag = MagField()
         mag.bx = self.bx_
         mag.by = self.by_
