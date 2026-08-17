@@ -28,7 +28,11 @@ class FieldNode : public rclcpp::Node {
      */
     rclcpp::Subscription<
         hcoil_interfaces::msg::MagField>::SharedPtr field_sub_;
-
+    /**
+     * @brief Publisher for the actual (post-clamp) field values.
+     */
+    rclcpp::Publisher<
+    	hcoil_interfaces::msg::MagField>::SharedPtr field_actual_pub_;
     /**
      * @brief Publishers for voltage and current messages.
      */
@@ -93,7 +97,7 @@ class FieldNode : public rclcpp::Node {
     /**
      * @brief Maximum allowed magnetic field in mT.
      */
-    int maxField_ = 20;
+    int maxField_ = 22;
 
     /**
      * @brief Maximum allowed change in field per cycle in mT.

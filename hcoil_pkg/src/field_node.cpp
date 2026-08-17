@@ -51,6 +51,8 @@ FieldNode::FieldNode(const std::string& nodeName, rclcpp::NodeOptions& options)
 
     field_sub_ = this->create_subscription<hcoil_interfaces::msg::MagField>(
         "magfield", 10, std::bind(&FieldNode::callbackField, this, _1));
+    field_actual_pub_ = this->create_publisher<hcoil_interfaces::msg::MagField>(
+    	"magfield_actual", 10);
     adv_num_ = allAddress_.size();
     vi_pubs_.resize(adv_num_);
     vi_msgs_.resize(adv_num_);  // Ensure vi_msgs_ is properly initialized
@@ -111,6 +113,15 @@ void FieldNode::callbackField(const hcoil_interfaces::msg::MagField& msg) {
     bx_ = bx;
     by_ = by;
     bz_ = bz;
+    
+    hcoil_interfaces::msg::MagField actual_msg;
+    actual_msg.header.stamp = this->get_clock()->now();
+    actual_msg.header.frame_id = "coil_frame";
+    actual_msg.bx = bx_;
+    actual_msg.by = by_;
+    actual_msg.bz = bz_;
+    field_actual_pub_->publish(actual_msg);
+    
     RCLCPP_INFO(this->get_logger(), "Recived field bx= %f, by= %f, bz= %f", bx_,
                 by_, bz_);
     ix_ = bx_ / cal_x_;
