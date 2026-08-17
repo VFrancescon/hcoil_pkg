@@ -1,0 +1,65 @@
+Coil Implementation Stuff
+Vittorio has set up this repo: https://github.com/Stormlabuk/hcoil_pkg
+which contains: https://github.com/Stormlabuk/hcoil_pkg/tree/main/hcoil_pkg/scripts
+
+1) Turn on coils: wall 3-phase switch, round the back of the coil power supplies, cabinet switch AND button, reverse all this to go home. Make sure RC/LC is illuminated on all 5 supplies.\\
+
+2) In Terminator ctrl shft o (not zero) splits vertically (and e horizontally).
+cd into /ros2_ws
+source /opt/ros/humble/setup.bash -> tells PC where ros is installed (this exists above \home)
+colcon build --symlink-install  			-> compile
+source install/setup.bash 		-> tells PC where our own ros packages are installed. Don’t change setup.bash!
+sudo chmod a+rwx /dev/ttyUSB* 	-> permission to write to serial nodes (initial setup)
+ros2 launch hcoil_pkg field_launch.py 	-> if field_launch.py has worked the red light on the left of the power supply comes on
+
+new terminal:
+cd into /ros2_ws
+source /opt/ros/humble/setup.bash 
+source install/setup.bash
+
+ros2 run hcoil_pkg publish_field.py 	-> publishes current field
+ros2 run hcoil_pkg publish_field.py --ros-args -p bx:=5.0	-> sets current field (must be 5.0, not 5)
+ros2 topic pub /magfield hcoil_interfaces/msg/MagField "{bx: 0.0, by: 0.0, bz: 0.0}" --once
+ros2 run hcoil_pkg publish_field.py --ros-args -p bx:=5.0 -p by:=5.0 -p bz:=0.0
+
+ros2 node list -> /PSU0 … /field
+ros2 node info \field -> tells you subsribers and publishers
+ros2 topic list
+ros2 topic echo /mag_field
+
+in another window:
+ros2 topic echo /VI/PSU0 (for example) tells you the V and I to the PSU
+PSU0 & PSU1 = B_x
+PSU4 = 	 B_y
+PSU2 & PSU3=  B_z
+
+
+ros2 run hcoil_pkg sweep_axis.py 		-> sweeps all fields
+ros2 run hcoil_pkg sweep_axis_PRL.py --ros-args -p abs:=12.0 -p axis:=z
+
+
+CTRL-C to kill all nodes in any given terminal.\\
+
+in sweep_axis.py you can copy the methodology
+
+line 100 ish of CMakeLists need to add new python install, then 
+~/ros2_ws colcon build --symlink-install
+
+
+From Claude:
+field_node enforces maxField_=22mT / maxChange_=15mT as hardcoded C++ literals (not even parameters — can't tune without recompiling), while psu_node independently enforces 80%-of-rated V/A limits from its own ROS parameters. Neither layer knows the other's limit exists. That's the architectural weak point for what's supposed to be the safety-critical part of the system.
+
+In:
+C:\...\GitHub\hcoil_pkg\hcoil_pkg\include\hcoil_pkg\field_node.hpp
+int maxField_ = 22;
+int maxChange_ = 15;
+
+C:\...\ GitHub\hcoil_pkg\hcoil_pkg\src\field_node.cpp
+
+\hcoil_pkg\hcoil_pkg\scripts\publish_field.py changed 
+
+sweep_axis_PRL.py:
+sweep_axis.py --[MagField: bx,by,bz]--> hcoil_pkg/src/field_node.cpp
+--[VoltAmp: presumably V/I]--> psu_node --> actual hardware
+
+
