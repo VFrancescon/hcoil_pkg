@@ -19,9 +19,8 @@ maximum absolute field and field change are defined.
 
 
 To Do:
-New python script to calibrate the catheter.
 fourth camera + moves cameras closer
-Read motive data
+Read motive data from ros
 
 Implement a teleoperator for field?
 
