@@ -65,15 +65,6 @@ class MinimalPublisher(Node):
             # self._loop_rate.sleep()
             time.sleep(5)
 
-    # def publish_field(self):
-    #     mag = MagField()
-    #     mag.bx = self.bx_
-    #     mag.by = self.by_
-    #     mag.bz = self.bz_
-    #     mag.header.frame_id = "coil_frame"
-    #     self.publisher_.publish(mag)
-    #     self.get_logger().info("Publishing field: x: %f, y: %f, z: %f" % (self.bx_, self.by_, self.bz_))
-
 def main(args=None):
     rclpy.init(args=args)
     minimal_publisher = MinimalPublisher()

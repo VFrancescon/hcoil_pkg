@@ -18,8 +18,11 @@ Meanwhile, in \ros2_ws/src/hcoil_pkg/hcoil_pkg/include/hcoil_pkg/field_node.hpp
 maximum absolute field and field change are defined.
 
 
-To Do
+To Do:
 New python script to calibrate the catheter.
+fourth camera + moves cameras closer
+Read motive data
+
 Implement a teleoperator for field?
 
 
@@ -29,6 +32,8 @@ Instructions:
 1) Turn on coils: wall 3-phase switch, round the back of the coil power supplies, cabinet switch AND button, reverse all this to go home. Make sure RC/LC is illuminated on all 5 supplies.\\
 
 2) cd into /ros2_ws
+either: ./start_field.sh
+or:
 source /opt/ros/humble/setup.bash -> tells PC where ros is installed (this exists above \home)
 colcon build --symlink-install  			-> compile
 source install/setup.bash  
@@ -38,7 +43,8 @@ sudo chmod a+rwx /dev/ttyUSB*
 ros2 launch hcoil_pkg field_launch.py 	
 	-> if field_launch.py has worked the red light on the left of the power supply comes on
 
-new terminal:
+
+3) new terminal (1):
 cd into /ros2_ws
 source /opt/ros/humble/setup.bash 
 source install/setup.bash
@@ -49,16 +55,22 @@ ros2 run hcoil_pkg publish_field.py --ros-args -p bx:=5.0
 ros2 topic pub /magfield hcoil_interfaces/msg/MagField "{bx: 0.0, by: 0.0, bz: 0.0}" --once
 ros2 run hcoil_pkg publish_field.py --ros-args -p bx:=5.0 -p by:=5.0 -p bz:=0.0
 
+
+4) new terminal (2):
+cd into /ros2_ws -> source /opt/ros/humble/setup.bash -> source install/setup.bash
+
 ros2 node list -> /PSU0 … /field
 ros2 node info \field -> tells you subsribers and publishers
 ros2 topic list
-ros2 topic echo /mag_field
+ros2 topic echo /magfield
 
-in another window:
 ros2 topic echo /VI/PSU0 (for example) tells you the V and I to the PSU
 PSU0 & PSU1 = B_x
 PSU4 = 	 B_y
 PSU2 & PSU3=  B_z
+
+
+
 
 
 ros2 run hcoil_pkg sweep_axis.py 		-> sweeps all fields
@@ -68,6 +80,7 @@ ros2 run hcoil_pkg sweep_axis_PRL.py --ros-args -p abs:=12.0 -p axis:=z
 CTRL-C to kill all nodes in any given terminal.\\
 
 in sweep_axis.py you can copy the methodology
+careful with file permissions, you can check these with:= "ls -l"
 
 line 100 ish of ./src/hcoil_pkg/hcoil_pkg/CMakeLists.txt
 you need to add new python install, then 

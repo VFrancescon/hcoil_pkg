@@ -99,7 +99,8 @@ install(PROGRAMS
   scripts/publish_field.py
   # scripts/request_field.py
   scripts/sweep_axis.py
-  scripts/sweep_axis_PRL17082026.py
+  scripts/sweep_axis_PRL_interactive.py
+  scripts/sweep_axis_PRL_scripted.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
