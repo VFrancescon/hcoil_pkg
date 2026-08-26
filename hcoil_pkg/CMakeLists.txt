@@ -97,10 +97,10 @@ ament_python_install_package(${PROJECT_NAME})
 
 install(PROGRAMS
   scripts/publish_field.py
-  # scripts/request_field.py
-  scripts/sweep_axis.py
-  scripts/sweep_axis_PRL_interactive.py
+  # scripts/sweep_axis.py
   scripts/sweep_axis_PRL_scripted.py
+  scripts/sweep_axis_PRL_terminal.py
+  scripts/sweep_axis_ReadMocap.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
