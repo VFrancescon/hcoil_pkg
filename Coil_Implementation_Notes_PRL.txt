@@ -19,6 +19,7 @@ maximum absolute field and field change are defined.
 
 
 To Do:
+Bring it all together with some bash file or other. concatenate the implementation readme's too.
 Name Markers for persistence
 Process motive data from ros - some basic closed loop code
 Implement a teleoperator for field?
