@@ -82,7 +82,7 @@ class FieldNode : public rclcpp::Node {
      */
     float cal_x_ = 0.542;  //!< Bx calibration factor.
     float cal_y_ = 1.07;   //!< By calibration factor.
-    float cal_z_ = 0.633;  //!< Bz calibration factor.
+    float cal_z_ = -0.633;  //!< Bz calibration factor -  reversed 07-09-2026 - PRL
 
     /**
      * @brief Current values for x, y, and z axes in A.
